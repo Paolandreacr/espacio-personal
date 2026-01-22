@@ -1,269 +1,214 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Mi Espacio Personal</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mi Espacio Terapéutico</title>
 
-<style>
-:root{
-  --beige:#f6f1eb;
-  --lila:#c8b6e2;
-  --menta:#b8e0d2;
-  --texto:#4a4a4a;
-}
+  <style>
+    :root {
+      --beige: #f7f5f2;
+      --lila: #c6b7e2;
+      --menta: #9fd6c2;
+      --menta-soft: #e6f4ef;
+      --texto: #3a3a3a;
+    }
 
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont;
-  background:var(--beige);
-  color:var(--texto);
-}
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--beige);
+      color: var(--texto);
+    }
 
-header{
-  padding:16px;
-  text-align:center;
-  font-weight:600;
-}
+    header {
+      padding: 16px;
+      background: linear-gradient(90deg, var(--menta), var(--lila));
+      color: #fff;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
 
-nav{
-  display:flex;
-  justify-content:space-around;
-  background:white;
-  border-radius:16px;
-  margin:0 12px;
-  padding:8px;
-}
+    .container {
+      padding: 16px;
+      max-width: 900px;
+      margin: auto;
+    }
 
-nav button{
-  background:none;
-  border:none;
-  font-weight:500;
-  color:#555;
-}
+    /* FECHA */
+    .date-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--menta-soft);
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
 
-nav button.active{
-  color:var(--lila);
-}
+    .date-bar button {
+      background: var(--menta);
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
 
-section{
-  display:none;
-  padding:16px;
-}
+    .date-text {
+      font-weight: 600;
+      text-transform: capitalize;
+    }
 
-section.active{
-  display:block;
-}
+    /* INTENCIÓN */
+    .intention {
+      background: #fff;
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border-left: 6px solid var(--menta);
+    }
 
-.card{
-  background:white;
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:16px;
-  box-shadow:0 4px 10px rgba(0,0,0,.05);
-}
+    .intention textarea {
+      width: 100%;
+      border: none;
+      resize: none;
+      font-size: 1rem;
+      outline: none;
+      background: transparent;
+    }
 
-/* ===== DÍA ===== */
-.hour{
-  display:grid;
-  grid-template-columns:60px 1fr 30px;
-  gap:8px;
-  align-items:start;
-  margin-bottom:8px;
-  font-size:12px;
-}
+    /* HORARIO */
+    .hour-block {
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-left: 6px solid var(--menta);
+    }
 
-.hour textarea{
-  width:100%;
-  border:none;
-  resize:none;
-  background:#f9f7f4;
-  border-radius:8px;
-  padding:6px;
-  font-size:12px;
-}
+    .hour-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+    }
 
-.hour textarea:focus{
-  outline:2px solid var(--menta);
-}
+    .hour-block textarea {
+      width: 100%;
+      margin-top: 6px;
+      border: none;
+      resize: none;
+      outline: none;
+      font-size: 0.95rem;
+    }
 
-/* ===== PROGRESO ===== */
-.progress{
-  background:#eee;
-  border-radius:12px;
-  overflow:hidden;
-}
-
-.progress div{
-  height:14px;
-  background:var(--lila);
-  width:0%;
-  transition:.3s;
-}
-
-/* ===== CALENDARIO ===== */
-.day{
-  background:#ffffff;
-  border-radius:12px;
-  padding:8px;
-  min-height:90px;
-  font-size:12px;
-}
-
-.day textarea{
-  width:100%;
-  border:none;
-  resize:none;
-  background:transparent;
-}
-
-/* ===== STICKIES ===== */
-.sticky{
-  position:absolute;
-  background:#fff8b5;
-  padding:12px;
-  border-radius:12px;
-  width:160px;
-  cursor:move;
-  box-shadow:0 4px 10px rgba(0,0,0,.2);
-}
-</style>
+    .half-hour {
+      height: 10px;
+      border-left: 2px dashed var(--menta);
+      margin-left: 20px;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 
 <body>
 
-<header>🌿 Mi espacio personal</header>
+<header>
+  🌿 Mi día consciente
+</header>
 
-<nav>
-  <button class="active" onclick="openTab('dia')">Día</button>
-  <button onclick="openTab('mes')">Mes</button>
-  <button onclick="openTab('proyectos')">Proyectos</button>
-  <button onclick="openTab('salud')">Salud</button>
-  <button onclick="openTab('diario')">Diario</button>
-</nav>
+<div class="container">
 
-<!-- ================= DÍA ================= -->
-<section id="dia" class="active">
-  <div class="card">
-    <h3>⏰ Mi día (4 am – 11 pm)</h3>
-    <div id="daySchedule"></div>
+  <!-- FECHA -->
+  <div class="date-bar">
+    <button onclick="changeDay(-1)">◀</button>
+    <div class="date-text" id="dateText"></div>
+    <button onclick="changeDay(1)">▶</button>
   </div>
-</section>
 
-<!-- ================= MES ================= -->
-<section id="mes">
-  <div class="card">
-    <h3>🗓 Calendario mensual</h3>
-    <div id="calendar" style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;"></div>
+  <!-- INTENCIÓN -->
+  <div class="intention">
+    <strong>intención del día</strong>
+    <textarea rows="2" placeholder="¿cómo quiero habitar este día?" id="intention"></textarea>
   </div>
-</section>
 
-<!-- ================= PROYECTOS ================= -->
-<section id="proyectos">
-  <div class="card">
-    <h3>📌 Proyecto principal</h3>
-    <input type="range" min="0" max="100" value="30" oninput="updateProgress(this)">
-    <div class="progress"><div style="width:30%"></div></div>
-  </div>
-</section>
+  <!-- HORAS -->
+  <div id="schedule"></div>
 
-<!-- ================= SALUD ================= -->
-<section id="salud">
-  <div class="card">
-    <h3>💪 Tracker de salud</h3>
-    <label><input type="checkbox"> Ejercicio</label><br>
-    <label><input type="checkbox"> Agua</label><br>
-    <label><input type="checkbox"> Medicación</label>
-  </div>
-</section>
-
-<!-- ================= DIARIO ================= -->
-<section id="diario">
-  <div class="card">
-    <h3>🧠 Diario emocional</h3>
-    <input type="range" min="1" max="10">
-    <textarea rows="5" style="width:100%" placeholder="Escribe libremente..."></textarea>
-  </div>
-</section>
-
-<button onclick="newSticky()" style="position:fixed;bottom:20px;right:20px;">➕ Nota</button>
+</div>
 
 <script>
-/* ===== PESTAÑAS ===== */
-function openTab(id){
-  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
-}
+  let currentDate = new Date();
 
-/* ===== PROGRESO ===== */
-function updateProgress(input){
-  input.nextElementSibling.querySelector('div').style.width = input.value + '%';
-}
-
-/* ===== STICKIES ===== */
-function newSticky(){
-  const note = document.createElement('div');
-  note.className='sticky';
-  note.contentEditable=true;
-  note.style.top='120px';
-  note.style.left='120px';
-  note.innerText='Escribe aquí…';
-  document.body.appendChild(note);
-
-  let ox, oy;
-  note.onmousedown=e=>{
-    ox=e.offsetX;
-    oy=e.offsetY;
-    document.onmousemove=ev=>{
-      note.style.left=(ev.pageX-ox)+'px';
-      note.style.top=(ev.pageY-oy)+'px';
-    };
-    document.onmouseup=()=>document.onmousemove=null;
-  };
-}
-
-/* ===== DÍA HORA POR HORA ===== */
-const schedule = document.getElementById("daySchedule");
-
-for(let h=4; h<=23; h++){
-  const key = `hour-${h}`;
-  const saved = localStorage.getItem(key) || "";
-  schedule.innerHTML += `
-    <div class="hour">
-      <strong>${h}:00</strong>
-      <textarea oninput="localStorage.setItem('${key}', this.value)">${saved}</textarea>
-      <input type="checkbox">
-    </div>
-  `;
-}
-
-/* ===== CALENDARIO ===== */
-const calendar = document.getElementById("calendar");
-const today = new Date();
-const year = today.getFullYear();
-const month = today.getMonth();
-
-function loadCalendar(){
-  calendar.innerHTML="";
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-  for(let i=0;i<firstDay;i++) calendar.innerHTML += "<div></div>";
-
-  for(let d=1; d<=daysInMonth; d++){
-    const key = `day-${year}-${month}-${d}`;
-    const note = localStorage.getItem(key) || "";
-    calendar.innerHTML += `
-      <div class="day">
-        <strong>${d}</strong>
-        <textarea oninput="localStorage.setItem('${key}', this.value)">${note}</textarea>
-      </div>
-    `;
+  function formatDate(date) {
+    return date.toLocaleDateString('es-ES', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   }
-}
-loadCalendar();
+
+  function changeDay(offset) {
+    currentDate.setDate(currentDate.getDate() + offset);
+    loadDay();
+  }
+
+  function loadDay() {
+    const dateKey = currentDate.toISOString().split('T')[0];
+    document.getElementById('dateText').innerText = formatDate(currentDate);
+
+    document.getElementById('intention').value =
+      localStorage.getItem(dateKey + '-intention') || '';
+
+    const schedule = document.getElementById('schedule');
+    schedule.innerHTML = '';
+
+    for (let hour = 4; hour <= 23; hour++) {
+      const hourKey = `${dateKey}-hour-${hour}`;
+
+      const block = document.createElement('div');
+      block.className = 'hour-block';
+
+      block.innerHTML = `
+        <div class="hour-header">
+          <input type="checkbox" id="${hourKey}-check">
+          <span>${hour}:00</span>
+        </div>
+        <textarea rows="2" placeholder="actividad / nota..." id="${hourKey}-text"></textarea>
+      `;
+
+      schedule.appendChild(block);
+
+      if (hour < 23) {
+        const half = document.createElement('div');
+        half.className = 'half-hour';
+        schedule.appendChild(half);
+      }
+
+      const check = block.querySelector('input');
+      const text = block.querySelector('textarea');
+
+      check.checked = localStorage.getItem(hourKey + '-check') === 'true';
+      text.value = localStorage.getItem(hourKey + '-text') || '';
+
+      check.onchange = () =>
+        localStorage.setItem(hourKey + '-check', check.checked);
+
+      text.oninput = () =>
+        localStorage.setItem(hourKey + '-text', text.value);
+    }
+  }
+
+  document.getElementById('intention').oninput = function () {
+    const dateKey = currentDate.toISOString().split('T')[0];
+    localStorage.setItem(dateKey + '-intention', this.value);
+  };
+
+  loadDay();
 </script>
 
 </body>
