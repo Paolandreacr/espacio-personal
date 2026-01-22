@@ -86,6 +86,31 @@ section.active{
   cursor:move;
   box-shadow:0 4px 10px rgba(0,0,0,.2);
 }
+.day{
+  background:#ffffff;
+  border-radius:12px;
+  padding:8px;
+  min-height:90px;
+  font-size:12px;
+  position:relative;
+}
+
+.day strong{
+  display:block;
+  margin-bottom:4px;
+}
+
+.day textarea{
+  width:100%;
+  border:none;
+  resize:none;
+  font-size:11px;
+  background:transparent;
+}
+
+.day textarea:focus{
+  outline:none;
+}  
 </style>
 </head>
 
@@ -95,15 +120,17 @@ section.active{
 
 <nav>
   <button class="active" onclick="openTab('dia')">Día</button>
+  <button onclick="openTab('mes')">Mes</button>
   <button onclick="openTab('proyectos')">Proyectos</button>
   <button onclick="openTab('salud')">Salud</button>
   <button onclick="openTab('diario')">Diario</button>
 </nav>
 
 <section id="dia" class="active">
+<section id="mes">
   <div class="card">
-    <h3>🕒 Vista hora por hora</h3>
-    <textarea id="horas" rows="6" style="width:100%" placeholder="08:00 — Desayuno consciente..."></textarea>
+    <h3>🗓 Calendario mensual</h3>
+    <div id="calendar" style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;"></div>
   </div>
 </section>
 
@@ -167,6 +194,37 @@ function newSticky(){
     document.onmouseup=()=>document.onmousemove=null;
   };
 }
+const calendar = document.getElementById("calendar");
+const today = new Date();
+const year = today.getFullYear();
+const month = today.getMonth();
+
+function loadCalendar(){
+  calendar.innerHTML="";
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  for(let i=0;i<firstDay;i++){
+    calendar.innerHTML += "<div></div>";
+  }
+
+  for(let d=1; d<=daysInMonth; d++){
+    const key = `day-${year}-${month}-${d}`;
+    const note = localStorage.getItem(key) || "";
+    calendar.innerHTML += `
+      <div class="day">
+        <strong>${d}</strong>
+        <textarea oninput="saveDay('${key}', this.value)">${note}</textarea>
+      </div>
+    `;
+  }
+}
+
+function saveDay(key,value){
+  localStorage.setItem(key,value);
+}
+
+loadCalendar();
 </script>
 
 </body>
