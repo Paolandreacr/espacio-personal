@@ -1,313 +1,282 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mi Espacio Personal</title>
+  <meta charset="UTF-8" />
+  <title>Mi Espacio Terapéutico</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-:root{
-  --beige:#f7f5f2;
-  --lila:#cbbce6;
-  --menta:#9fd6c2;
-  --menta-soft:#e6f4ef;
-  --texto:#3a3a3a;
-}
+  <style>
+    :root {
+      --beige: #f7f3ee;
+      --lila: #c6b7e2;
+      --menta: #bfe6d3;
+      --menta-fuerte: #9fd9c1;
+      --texto: #4a4a4a;
+    }
 
-body{
-  margin:0;
-  font-family:Inter,system-ui,sans-serif;
-  background:var(--beige);
-  color:var(--texto);
-}
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--beige);
+      color: var(--texto);
+    }
 
-header{
-  padding:16px;
-  background:linear-gradient(90deg,var(--menta),var(--lila));
-  color:white;
-  text-align:center;
-}
+    header {
+      padding: 16px;
+      background: linear-gradient(90deg, var(--menta), var(--lila));
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-nav{
-  display:flex;
-  justify-content:space-around;
-  background:white;
-  padding:10px;
-  border-radius:16px;
-  margin:12px;
-}
+    header h1 {
+      font-size: 18px;
+      margin: 0;
+    }
 
-nav button{
-  background:none;
-  border:none;
-  color:#666;
-}
+    .tabs {
+      display: flex;
+      gap: 6px;
+      padding: 10px;
+      background: #fff;
+      overflow-x: auto;
+    }
 
-nav button.active{ color:var(--lila); }
+    .tab {
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: none;
+      background: var(--menta);
+      cursor: pointer;
+      font-size: 14px;
+    }
 
-section{ display:none; padding:16px; max-width:1200px; margin:auto; }
-section.active{ display:block; }
+    .tab.active {
+      background: var(--menta-fuerte);
+      font-weight: 600;
+    }
 
-.card{
-  background:white;
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:16px;
-  box-shadow:0 4px 10px rgba(0,0,0,.05);
-}
+    .content {
+      display: none;
+      padding: 16px;
+    }
 
-/* FECHA */
-.date-bar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background:var(--menta-soft);
-  padding:12px;
-  border-radius:12px;
-  margin-bottom:16px;
-}
+    .content.active {
+      display: block;
+    }
 
-.date-bar button{
-  background:var(--menta);
-  border:none;
-  color:white;
-  padding:6px 12px;
-  border-radius:8px;
-}
+    /* ---------- DÍA ---------- */
 
-/* INTENCIÓN */
-.intention textarea{
-  font-style:italic;
-  color:var(--lila);
-  border:none;
-  resize:none;
-  outline:none;
-  width:100%;
-}
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
 
-/* HORAS */
-.hour-block{
-  background:white;
-  border-radius:14px;
-  padding:12px;
-  margin-bottom:16px;
-  border-left:6px solid var(--menta);
-}
+    .date-nav button {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+    }
 
-.sub-block{
-  background:var(--menta-soft);
-  border-radius:10px;
-  padding:8px;
-  margin-top:6px;
-}
+    .intention {
+      margin: 12px 0;
+      font-style: italic;
+      color: #9a8bc7;
+    }
 
-.sub-header{
-  display:flex;
-  justify-content:space-between;
-  font-size:0.75rem;
-}
+    .hour-block {
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-left: 6px solid var(--menta);
+    }
 
-/* SEMANA */
-.week-nav{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:12px;
-}
+    .half-hour {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
 
-.week-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:8px;
-}
+    .half-hour input[type="text"] {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 6px;
+    }
 
-.week-day{
-  background:white;
-  border-radius:12px;
-  padding:8px;
-  min-height:120px;
-}
+    .half-hour label {
+      font-size: 12px;
+      color: #777;
+    }
 
-.week-day strong{
-  display:block;
-  margin-bottom:6px;
-  color:var(--lila);
-  font-size:0.85rem;
-}
+    /* ---------- SEMANA ---------- */
 
-.week-item{
-  background:var(--menta-soft);
-  border-radius:8px;
-  padding:6px;
-  font-size:0.75rem;
-  margin-bottom:6px;
-}
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
 
-/* STICKIES */
-.sticky{
-  position:absolute;
-  background:#fff8b5;
-  padding:12px;
-  border-radius:12px;
-  width:160px;
-  cursor:move;
-}
-</style>
+    .week-day {
+      background: #fff;
+      border-radius: 12px;
+      padding: 8px;
+      min-height: 120px;
+      border-top: 6px solid var(--menta);
+    }
+
+    .week-day h4 {
+      margin: 0 0 6px;
+      font-size: 13px;
+    }
+
+    /* ---------- GENÉRICO ---------- */
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border-left: 6px solid var(--lila);
+    }
+  </style>
 </head>
 
 <body>
 
-<header>🌿 Mi espacio terapéutico</header>
+<header>
+  <h1>🌱 Mi espacio</h1>
+</header>
 
-<nav>
-  <button class="active" onclick="openTab('dia')">Día</button>
-  <button onclick="openTab('semana')">Semana</button>
-</nav>
+<div class="tabs">
+  <button class="tab active" onclick="openTab('day')">Día</button>
+  <button class="tab" onclick="openTab('week')">Semana</button>
+  <button class="tab" onclick="openTab('month')">Mes</button>
+  <button class="tab" onclick="openTab('semester')">Semestre</button>
+  <button class="tab" onclick="openTab('projects')">Proyectos</button>
+  <button class="tab" onclick="openTab('health')">Salud</button>
+</div>
 
-<section id="dia" class="active">
-  <div class="date-bar">
-    <button onclick="changeDay(-1)">◀</button>
-    <div id="dateText"></div>
-    <button onclick="changeDay(1)">▶</button>
+<!-- ---------- DÍA ---------- -->
+<div id="day" class="content active">
+
+  <div class="day-header">
+    <div class="date-nav">
+      <button onclick="changeDay(-1)">←</button>
+      <span id="currentDate"></span>
+      <button onclick="changeDay(1)">→</button>
+    </div>
   </div>
 
-  <div class="card intention">
-    <textarea id="intention" rows="2" placeholder="Intención del día..."></textarea>
+  <div class="intention">
+    Intención del día...
+    <input type="text" style="width:100%; margin-top:6px;">
   </div>
 
-  <div id="schedule"></div>
-</section>
+  <div id="hours"></div>
+</div>
 
-<section id="semana">
-  <div class="week-nav">
-    <button onclick="changeWeek(-7)">⬆ Semana anterior</button>
-    <button onclick="changeWeek(7)">⬇ Semana siguiente</button>
+<!-- ---------- SEMANA ---------- -->
+<div id="week" class="content">
+  <div class="day-header">
+    <div class="date-nav">
+      <button>↑</button>
+      <strong>Semana</strong>
+      <button>↓</button>
+    </div>
   </div>
+
   <div class="week-grid" id="weekGrid"></div>
-</section>
+</div>
 
-<button onclick="newSticky()" style="position:fixed;bottom:20px;right:20px;">➕ Nota</button>
+<!-- ---------- MES ---------- -->
+<div id="month" class="content">
+  <div class="card">Vista mensual (próximo paso)</div>
+</div>
+
+<!-- ---------- SEMESTRE ---------- -->
+<div id="semester" class="content">
+  <div class="card">Vista semestral (metas + progreso)</div>
+</div>
+
+<!-- ---------- PROYECTOS ---------- -->
+<div id="projects" class="content">
+  <div class="card">Proyectos grandes + barras de progreso</div>
+</div>
+
+<!-- ---------- SALUD ---------- -->
+<div id="health" class="content">
+  <div class="card">Tracker de ejercicio, agua, medicación, citas, diario emocional</div>
+</div>
 
 <script>
-function openTab(id){
-  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
-}
+  let currentDay = new Date();
 
-let currentDate=new Date();
-let weekOffset=0;
+  function openTab(id) {
+    document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
 
-function formatDate(d){
-  return d.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
-}
+  function renderDate() {
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    document.getElementById('currentDate').textContent =
+      currentDay.toLocaleDateString('es-ES', options);
+  }
 
-function changeDay(o){ currentDate.setDate(currentDate.getDate()+o); loadDay(); loadWeek(); }
+  function changeDay(delta) {
+    currentDay.setDate(currentDay.getDate() + delta);
+    renderDate();
+  }
 
-function loadDay(){
-  const key=currentDate.toISOString().split('T')[0];
-  document.getElementById('dateText').innerText=formatDate(currentDate);
+  function renderHours() {
+    const container = document.getElementById('hours');
+    container.innerHTML = '';
 
-  const intent=document.getElementById('intention');
-  intent.value=localStorage.getItem(key+'-intent')||'';
-  intent.oninput=()=>localStorage.setItem(key+'-intent',intent.value);
+    for (let h = 4; h <= 23; h++) {
+      const block = document.createElement('div');
+      block.className = 'hour-block';
+      block.innerHTML = `<strong>${h}:00</strong>`;
 
-  const sch=document.getElementById('schedule');
-  sch.innerHTML='';
+      ['00', '30'].forEach(min => {
+        const row = document.createElement('div');
+        row.className = 'half-hour';
+        row.innerHTML = `
+          <input type="checkbox">
+          <input type="text" placeholder="${h}:${min}">
+          <label>
+            <input type="checkbox"> mostrar en semana
+          </label>
+        `;
+        block.appendChild(row);
+      });
 
-  for(let h=4;h<=23;h++){
-    const block=document.createElement('div');
-    block.className='hour-block';
-    block.innerHTML=`<strong>${h}:00</strong>`;
+      container.appendChild(block);
+    }
+  }
 
-    ['00','30'].forEach(m=>{
-      const id=`${key}-${h}-${m}`;
-      const fix=id+'-fix';
+  function renderWeek() {
+    const grid = document.getElementById('weekGrid');
+    grid.innerHTML = '';
+    const days = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
 
-      const s=document.createElement('div');
-      s.className='sub-block';
-      s.innerHTML=`
-        <div class="sub-header">
-          ${h}:${m}
-          <label><input type="checkbox" id="${fix}"> ⭐</label>
-        </div>
-        <textarea rows="2" id="${id}"></textarea>
-      `;
-
-      const ta=s.querySelector(`#${id}`);
-      ta.value=localStorage.getItem(id)||'';
-      ta.oninput=()=>localStorage.setItem(id,ta.value);
-
-      const f=s.querySelector(`#${fix}`);
-      f.checked=localStorage.getItem(fix)==='1';
-      f.onchange=()=>{localStorage.setItem(fix,f.checked?'1':'0');loadWeek();};
-
-      block.appendChild(s);
+    days.forEach(d => {
+      const col = document.createElement('div');
+      col.className = 'week-day';
+      col.innerHTML = `<h4>${d}</h4>`;
+      grid.appendChild(col);
     });
-
-    sch.appendChild(block);
   }
-}
 
-function getMonday(d){
-  const date=new Date(d);
-  const day=date.getDay()||7;
-  date.setDate(date.getDate()-day+1);
-  return date;
-}
-
-function changeWeek(d){ weekOffset+=d; loadWeek(); }
-
-function loadWeek(){
-  const grid=document.getElementById('weekGrid');
-  grid.innerHTML='';
-
-  const base=new Date();
-  base.setDate(base.getDate()+weekOffset);
-  const monday=getMonday(base);
-
-  for(let i=0;i<7;i++){
-    const day=new Date(monday);
-    day.setDate(monday.getDate()+i);
-    const key=day.toISOString().split('T')[0];
-
-    const col=document.createElement('div');
-    col.className='week-day';
-    col.innerHTML=`<strong>${formatDate(day)}</strong>`;
-
-    Object.keys(localStorage).forEach(k=>{
-      if(k.startsWith(key) && k.endsWith('-fix') && localStorage.getItem(k)==='1'){
-        const baseKey=k.replace('-fix','');
-        const txt=localStorage.getItem(baseKey);
-        if(txt){
-          col.innerHTML+=`<div class="week-item">${txt}</div>`;
-        }
-      }
-    });
-
-    grid.appendChild(col);
-  }
-}
-
-function newSticky(){
-  const n=document.createElement('div');
-  n.className='sticky';
-  n.contentEditable=true;
-  n.innerText='nota…';
-  n.style.top='120px';
-  n.style.left='120px';
-  document.body.appendChild(n);
-  n.onmousedown=e=>{
-    const x=e.offsetX,y=e.offsetY;
-    document.onmousemove=ev=>{
-      n.style.left=(ev.pageX-x)+'px';
-      n.style.top=(ev.pageY-y)+'px';
-    };
-    document.onmouseup=()=>document.onmousemove=null;
-  }
-}
-
-loadDay(); loadWeek();
+  renderDate();
+  renderHours();
+  renderWeek();
 </script>
 
 </body>
