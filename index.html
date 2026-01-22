@@ -8,7 +8,7 @@
 <style>
 :root{
   --beige:#f7f5f2;
-  --lila:#c6b7e2;
+  --lila:#cbbce6;
   --menta:#9fd6c2;
   --menta-soft:#e6f4ef;
   --texto:#3a3a3a;
@@ -26,7 +26,6 @@ header{
   background:linear-gradient(90deg,var(--menta),var(--lila));
   color:white;
   text-align:center;
-  font-weight:600;
 }
 
 nav{
@@ -41,21 +40,12 @@ nav{
 nav button{
   background:none;
   border:none;
-  font-weight:500;
   color:#666;
 }
 
-nav button.active{
-  color:var(--lila);
-}
+nav button.active{ color:var(--lila); }
 
-section{
-  display:none;
-  padding:16px;
-  max-width:900px;
-  margin:auto;
-}
-
+section{ display:none; padding:16px; max-width:1200px; margin:auto; }
 section.active{ display:block; }
 
 .card{
@@ -66,7 +56,7 @@ section.active{ display:block; }
   box-shadow:0 4px 10px rgba(0,0,0,.05);
 }
 
-/* DÍA */
+/* FECHA */
 .date-bar{
   display:flex;
   justify-content:space-between;
@@ -85,14 +75,17 @@ section.active{ display:block; }
   border-radius:8px;
 }
 
-.intention textarea,
-.sub-block textarea{
-  width:100%;
+/* INTENCIÓN */
+.intention textarea{
+  font-style:italic;
+  color:var(--lila);
   border:none;
   resize:none;
   outline:none;
+  width:100%;
 }
 
+/* HORAS */
 .hour-block{
   background:white;
   border-radius:14px;
@@ -111,25 +104,45 @@ section.active{ display:block; }
 .sub-header{
   display:flex;
   justify-content:space-between;
-  font-size:0.8rem;
+  font-size:0.75rem;
 }
 
-/* Calendario mes */
-.day{
+/* SEMANA */
+.week-nav{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+
+.week-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:8px;
+}
+
+.week-day{
   background:white;
-  border-radius:10px;
+  border-radius:12px;
+  padding:8px;
+  min-height:120px;
+}
+
+.week-day strong{
+  display:block;
+  margin-bottom:6px;
+  color:var(--lila);
+  font-size:0.85rem;
+}
+
+.week-item{
+  background:var(--menta-soft);
+  border-radius:8px;
   padding:6px;
-  font-size:12px;
+  font-size:0.75rem;
+  margin-bottom:6px;
 }
 
-.day textarea{
-  width:100%;
-  border:none;
-  resize:none;
-  background:transparent;
-}
-
-/* Stickies */
+/* STICKIES */
 .sticky{
   position:absolute;
   background:#fff8b5;
@@ -148,13 +161,8 @@ section.active{ display:block; }
 <nav>
   <button class="active" onclick="openTab('dia')">Día</button>
   <button onclick="openTab('semana')">Semana</button>
-  <button onclick="openTab('mes')">Mes</button>
-  <button onclick="openTab('semestre')">Semestre</button>
-  <button onclick="openTab('proyectos')">Proyectos</button>
-  <button onclick="openTab('salud')">Salud</button>
 </nav>
 
-<!-- DÍA -->
 <section id="dia" class="active">
   <div class="date-bar">
     <button onclick="changeDay(-1)">◀</button>
@@ -163,54 +171,18 @@ section.active{ display:block; }
   </div>
 
   <div class="card intention">
-    <strong>intención del día</strong>
-    <textarea id="intention" rows="2"></textarea>
+    <textarea id="intention" rows="2" placeholder="Intención del día..."></textarea>
   </div>
 
   <div id="schedule"></div>
 </section>
 
-<!-- SEMANA -->
 <section id="semana">
-  <div class="card">
-    <h3>📅 Vista semanal</h3>
-    <p>estructura base lista – la armamos después con progreso %</p>
+  <div class="week-nav">
+    <button onclick="changeWeek(-7)">⬆ Semana anterior</button>
+    <button onclick="changeWeek(7)">⬇ Semana siguiente</button>
   </div>
-</section>
-
-<!-- MES -->
-<section id="mes">
-  <div class="card">
-    <h3>🗓 Calendario mensual</h3>
-    <div id="calendar" style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;"></div>
-  </div>
-</section>
-
-<!-- SEMESTRE -->
-<section id="semestre">
-  <div class="card">
-    <h3>📆 Visión semestre</h3>
-    <p>espacio para objetivos macro</p>
-  </div>
-</section>
-
-<!-- PROYECTOS -->
-<section id="proyectos">
-  <div class="card">
-    <h3>📌 Proyectos</h3>
-    <input type="range" min="0" max="100" value="30" oninput="this.nextElementSibling.firstChild.style.width=this.value+'%'">
-    <div class="progress"><div style="width:30%;height:12px;background:var(--lila)"></div></div>
-  </div>
-</section>
-
-<!-- SALUD -->
-<section id="salud">
-  <div class="card">
-    <h3>💚 Tracker de salud</h3>
-    <label><input type="checkbox"> Ejercicio</label><br>
-    <label><input type="checkbox"> Agua</label><br>
-    <label><input type="checkbox"> Medicación</label>
-  </div>
+  <div class="week-grid" id="weekGrid"></div>
 </section>
 
 <button onclick="newSticky()" style="position:fixed;bottom:20px;right:20px;">➕ Nota</button>
@@ -223,14 +195,14 @@ function openTab(id){
   event.target.classList.add('active');
 }
 
-/* DÍA */
 let currentDate=new Date();
+let weekOffset=0;
 
 function formatDate(d){
   return d.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
 }
 
-function changeDay(o){ currentDate.setDate(currentDate.getDate()+o); loadDay(); }
+function changeDay(o){ currentDate.setDate(currentDate.getDate()+o); loadDay(); loadWeek(); }
 
 function loadDay(){
   const key=currentDate.toISOString().split('T')[0];
@@ -244,38 +216,79 @@ function loadDay(){
   sch.innerHTML='';
 
   for(let h=4;h<=23;h++){
-    const b=document.createElement('div');
-    b.className='hour-block';
-    b.innerHTML=`<strong>${h}:00</strong>`;
+    const block=document.createElement('div');
+    block.className='hour-block';
+    block.innerHTML=`<strong>${h}:00</strong>`;
+
     ['00','30'].forEach(m=>{
       const id=`${key}-${h}-${m}`;
+      const fix=id+'-fix';
+
       const s=document.createElement('div');
       s.className='sub-block';
-      s.innerHTML=`<div class="sub-header">${h}:${m}</div>
-      <textarea rows="2" id="${id}"></textarea>`;
-      const ta=s.querySelector('textarea');
+      s.innerHTML=`
+        <div class="sub-header">
+          ${h}:${m}
+          <label><input type="checkbox" id="${fix}"> ⭐</label>
+        </div>
+        <textarea rows="2" id="${id}"></textarea>
+      `;
+
+      const ta=s.querySelector(`#${id}`);
       ta.value=localStorage.getItem(id)||'';
       ta.oninput=()=>localStorage.setItem(id,ta.value);
-      b.appendChild(s);
+
+      const f=s.querySelector(`#${fix}`);
+      f.checked=localStorage.getItem(fix)==='1';
+      f.onchange=()=>{localStorage.setItem(fix,f.checked?'1':'0');loadWeek();};
+
+      block.appendChild(s);
     });
-    sch.appendChild(b);
+
+    sch.appendChild(block);
   }
 }
 
-loadDay();
-
-/* MES */
-const calendar=document.getElementById("calendar");
-const today=new Date();
-const y=today.getFullYear(),m=today.getMonth();
-const days=new Date(y,m+1,0).getDate();
-const start=new Date(y,m,1).getDay();
-for(let i=0;i<start;i++) calendar.innerHTML+="<div></div>";
-for(let d=1;d<=days;d++){
-  calendar.innerHTML+=`<div class="day"><strong>${d}</strong><textarea></textarea></div>`;
+function getMonday(d){
+  const date=new Date(d);
+  const day=date.getDay()||7;
+  date.setDate(date.getDate()-day+1);
+  return date;
 }
 
-/* STICKIES */
+function changeWeek(d){ weekOffset+=d; loadWeek(); }
+
+function loadWeek(){
+  const grid=document.getElementById('weekGrid');
+  grid.innerHTML='';
+
+  const base=new Date();
+  base.setDate(base.getDate()+weekOffset);
+  const monday=getMonday(base);
+
+  for(let i=0;i<7;i++){
+    const day=new Date(monday);
+    day.setDate(monday.getDate()+i);
+    const key=day.toISOString().split('T')[0];
+
+    const col=document.createElement('div');
+    col.className='week-day';
+    col.innerHTML=`<strong>${formatDate(day)}</strong>`;
+
+    Object.keys(localStorage).forEach(k=>{
+      if(k.startsWith(key) && k.endsWith('-fix') && localStorage.getItem(k)==='1'){
+        const baseKey=k.replace('-fix','');
+        const txt=localStorage.getItem(baseKey);
+        if(txt){
+          col.innerHTML+=`<div class="week-item">${txt}</div>`;
+        }
+      }
+    });
+
+    grid.appendChild(col);
+  }
+}
+
 function newSticky(){
   const n=document.createElement('div');
   n.className='sticky';
@@ -293,6 +306,8 @@ function newSticky(){
     document.onmouseup=()=>document.onmousemove=null;
   }
 }
+
+loadDay(); loadWeek();
 </script>
 
 </body>
