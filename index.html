@@ -63,6 +63,31 @@ section.active{
   box-shadow:0 4px 10px rgba(0,0,0,.05);
 }
 
+/* ===== DÍA ===== */
+.hour{
+  display:grid;
+  grid-template-columns:60px 1fr 30px;
+  gap:8px;
+  align-items:start;
+  margin-bottom:8px;
+  font-size:12px;
+}
+
+.hour textarea{
+  width:100%;
+  border:none;
+  resize:none;
+  background:#f9f7f4;
+  border-radius:8px;
+  padding:6px;
+  font-size:12px;
+}
+
+.hour textarea:focus{
+  outline:2px solid var(--menta);
+}
+
+/* ===== PROGRESO ===== */
 .progress{
   background:#eee;
   border-radius:12px;
@@ -76,7 +101,23 @@ section.active{
   transition:.3s;
 }
 
-/* Stickies */
+/* ===== CALENDARIO ===== */
+.day{
+  background:#ffffff;
+  border-radius:12px;
+  padding:8px;
+  min-height:90px;
+  font-size:12px;
+}
+
+.day textarea{
+  width:100%;
+  border:none;
+  resize:none;
+  background:transparent;
+}
+
+/* ===== STICKIES ===== */
 .sticky{
   position:absolute;
   background:#fff8b5;
@@ -86,31 +127,6 @@ section.active{
   cursor:move;
   box-shadow:0 4px 10px rgba(0,0,0,.2);
 }
-.day{
-  background:#ffffff;
-  border-radius:12px;
-  padding:8px;
-  min-height:90px;
-  font-size:12px;
-  position:relative;
-}
-
-.day strong{
-  display:block;
-  margin-bottom:4px;
-}
-
-.day textarea{
-  width:100%;
-  border:none;
-  resize:none;
-  font-size:11px;
-  background:transparent;
-}
-
-.day textarea:focus{
-  outline:none;
-}  
 </style>
 </head>
 
@@ -126,7 +142,15 @@ section.active{
   <button onclick="openTab('diario')">Diario</button>
 </nav>
 
+<!-- ================= DÍA ================= -->
 <section id="dia" class="active">
+  <div class="card">
+    <h3>⏰ Mi día (4 am – 11 pm)</h3>
+    <div id="daySchedule"></div>
+  </div>
+</section>
+
+<!-- ================= MES ================= -->
 <section id="mes">
   <div class="card">
     <h3>🗓 Calendario mensual</h3>
@@ -134,6 +158,7 @@ section.active{
   </div>
 </section>
 
+<!-- ================= PROYECTOS ================= -->
 <section id="proyectos">
   <div class="card">
     <h3>📌 Proyecto principal</h3>
@@ -142,6 +167,7 @@ section.active{
   </div>
 </section>
 
+<!-- ================= SALUD ================= -->
 <section id="salud">
   <div class="card">
     <h3>💪 Tracker de salud</h3>
@@ -151,10 +177,10 @@ section.active{
   </div>
 </section>
 
+<!-- ================= DIARIO ================= -->
 <section id="diario">
   <div class="card">
     <h3>🧠 Diario emocional</h3>
-    <label>¿Cómo te sientes hoy?</label>
     <input type="range" min="1" max="10">
     <textarea rows="5" style="width:100%" placeholder="Escribe libremente..."></textarea>
   </div>
@@ -163,6 +189,7 @@ section.active{
 <button onclick="newSticky()" style="position:fixed;bottom:20px;right:20px;">➕ Nota</button>
 
 <script>
+/* ===== PESTAÑAS ===== */
 function openTab(id){
   document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
@@ -170,30 +197,49 @@ function openTab(id){
   event.target.classList.add('active');
 }
 
+/* ===== PROGRESO ===== */
 function updateProgress(input){
   input.nextElementSibling.querySelector('div').style.width = input.value + '%';
 }
 
+/* ===== STICKIES ===== */
 function newSticky(){
   const note = document.createElement('div');
   note.className='sticky';
   note.contentEditable=true;
-  note.style.top='100px';
-  note.style.left='100px';
+  note.style.top='120px';
+  note.style.left='120px';
   note.innerText='Escribe aquí…';
   document.body.appendChild(note);
 
-  let offsetX, offsetY;
+  let ox, oy;
   note.onmousedown=e=>{
-    offsetX=e.offsetX;
-    offsetY=e.offsetY;
+    ox=e.offsetX;
+    oy=e.offsetY;
     document.onmousemove=ev=>{
-      note.style.left=(ev.pageX-offsetX)+'px';
-      note.style.top=(ev.pageY-offsetY)+'px';
+      note.style.left=(ev.pageX-ox)+'px';
+      note.style.top=(ev.pageY-oy)+'px';
     };
     document.onmouseup=()=>document.onmousemove=null;
   };
 }
+
+/* ===== DÍA HORA POR HORA ===== */
+const schedule = document.getElementById("daySchedule");
+
+for(let h=4; h<=23; h++){
+  const key = `hour-${h}`;
+  const saved = localStorage.getItem(key) || "";
+  schedule.innerHTML += `
+    <div class="hour">
+      <strong>${h}:00</strong>
+      <textarea oninput="localStorage.setItem('${key}', this.value)">${saved}</textarea>
+      <input type="checkbox">
+    </div>
+  `;
+}
+
+/* ===== CALENDARIO ===== */
 const calendar = document.getElementById("calendar");
 const today = new Date();
 const year = today.getFullYear();
@@ -204,9 +250,7 @@ function loadCalendar(){
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  for(let i=0;i<firstDay;i++){
-    calendar.innerHTML += "<div></div>";
-  }
+  for(let i=0;i<firstDay;i++) calendar.innerHTML += "<div></div>";
 
   for(let d=1; d<=daysInMonth; d++){
     const key = `day-${year}-${month}-${d}`;
@@ -214,16 +258,11 @@ function loadCalendar(){
     calendar.innerHTML += `
       <div class="day">
         <strong>${d}</strong>
-        <textarea oninput="saveDay('${key}', this.value)">${note}</textarea>
+        <textarea oninput="localStorage.setItem('${key}', this.value)">${note}</textarea>
       </div>
     `;
   }
 }
-
-function saveDay(key,value){
-  localStorage.setItem(key,value);
-}
-
 loadCalendar();
 </script>
 
