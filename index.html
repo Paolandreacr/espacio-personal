@@ -203,20 +203,34 @@ header{
   position:relative;
 }
 
+/* ================== BARRA SEMESTRE ================== */
 .roadbar{
   position:absolute;
   inset:2px;
   border-radius:6px;
   opacity:.85;
+  cursor:pointer;
 }
 
-/* ================== COLORES PROYECTOS ================== */
+/* ================== PROYECTOS ================== */
 
 .cat-DesdeCeroLatam{background:var(--menta);}
 .cat-RelazoApp{background:var(--lila);}
 .cat-ComoSucedio{background:var(--salmon);}
 .cat-SegundoLibro{background:var(--azul);}
 .cat-VidaEnEuropa{background:var(--ocre);}
+
+/* ================== RECUADRO INFO ================== */
+#semesterInfo{
+  background:#fff;
+  border:1px solid #ccc;
+  padding:10px;
+  margin-top:10px;
+  border-radius:8px;
+  display:none;
+  max-width:300px;
+  font-size:14px;
+}
 </style>
 </head>
 
@@ -269,12 +283,12 @@ header{
 <!-- ================== SEMESTRE ================== -->
 <div id="semester" class="content">
   <div id="semesterView" class="semester"></div>
+  <div id="semesterInfo"></div>
 </div>
 
 <!-- ================== OTRAS ================== -->
 <div id="projects" class="content">🎯 Proyectos (en desarrollo)</div>
 <div id="health" class="content">💚 Salud (en desarrollo)</div>
-
 <script>
 /* ================== ESTADO GLOBAL ================== */
 let currentDay = new Date();
@@ -454,6 +468,7 @@ function renderSemester(){
         .forEach(e=>{
           const bar=document.createElement("div");
           bar.className="roadbar "+e.class;
+          bar.onclick=()=>showSemesterInfo(e);
           cell.appendChild(bar);
         });
 
@@ -467,18 +482,38 @@ function renderSemester(){
 }
 
 function addSemesterEvent(month,d){
-  const cat=prompt("Categoria: DesdeCeroLatam / RelazoApp / ComoSucedio / SegundoLibro / VidaEnEuropa");
-  const start=prompt("Fecha inicio YYYY-MM-DD");
-  const end=prompt("Fecha fin YYYY-MM-DD");
-  const detail=prompt("Detalle");
+  // Selección múltiple de categorías
+  const categories = ["DesdeCeroLatam","RelazoApp","ComoSucedio","SegundoLibro","VidaEnEuropa"];
+  let catSelected = prompt("Selecciona categorías separadas por coma:\n"+categories.join(","));
+  if(!catSelected) return;
+  const cats = catSelected.split(",").map(c=>c.trim()).filter(c=>categories.includes(c));
+  if(cats.length===0) return alert("Debe seleccionar al menos una categoría válida");
 
-  if(!cat||!start||!end) return;
+  const start = prompt("Fecha inicio YYYY-MM-DD");
+  const end = prompt("Fecha fin YYYY-MM-DD");
+  const detail = prompt("Detalle");
 
-  events.push({
-    start,end,detail,
-    class:"cat-"+cat
+  if(!start||!end) return;
+
+  cats.forEach(cat=>{
+    events.push({
+      start,end,detail,
+      class:"cat-"+cat
+    });
   });
   saveEvents(); renderSemester();
+}
+
+// Mostrar info de barra de color
+function showSemesterInfo(e){
+  const info = document.getElementById("semesterInfo");
+  info.style.display="block";
+  info.innerHTML=`
+    <strong>Categoria:</strong> ${e.class.replace("cat-","")}<br>
+    <strong>Detalle:</strong> ${e.detail||"-"}<br>
+    <strong>Inicio:</strong> ${e.start}<br>
+    <strong>Fin:</strong> ${e.end}
+  `;
 }
 
 /* ================== BORRAR ================== */
@@ -496,7 +531,6 @@ renderWeek();
 renderMonth();
 renderSemester();
 </script>
-
 <style>
 /* ======= AJUSTES FINALES DE SEGURIDAD ======= */
 .week-event button,
@@ -512,11 +546,24 @@ renderSemester();
   opacity: 0.6;
 }
 
+/* Barra del semestre */
 .roadbar {
   width: 100%;
   height: 6px;
   border-radius: 4px;
   margin-top: 2px;
+}
+
+/* Recuadro de información semestre */
+#semesterInfo {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* Animación suave */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Scroll suave para iPad */
