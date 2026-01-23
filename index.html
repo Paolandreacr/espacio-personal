@@ -62,164 +62,78 @@ header{
 }
 
 /* ================== DÍA ================== */
-
-.day-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.date-nav button{
-  border:none;
-  background:none;
-  font-size:20px;
-  cursor:pointer;
-}
-
-.intention{
-  margin:12px 0;
-  font-style:italic;
-  color:#9a8bc7;
-}
-
+.day-header{display:flex;justify-content:space-between;align-items:center;}
+.date-nav button{border:none;background:none;font-size:20px;cursor:pointer;}
+.intention{margin:12px 0;font-style:italic;color:#9a8bc7;}
 .hour-block{
-  background:#fff;
-  border-radius:12px;
-  padding:10px;
-  margin-bottom:10px;
+  background:#fff;border-radius:12px;padding:10px;margin-bottom:10px;
   border-left:6px solid var(--menta);
 }
-
-.half-hour{
-  display:flex;
-  gap:6px;
-  align-items:center;
-  margin-top:6px;
-}
-
+.half-hour{display:flex;gap:6px;align-items:center;margin-top:6px;}
 .half-hour input[type="text"]{
-  flex:1;
-  border:1px solid #ddd;
-  border-radius:8px;
-  padding:6px;
+  flex:1;border:1px solid #ddd;border-radius:8px;padding:6px;
 }
 
 /* ================== SEMANA ================== */
-
-.week-nav{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  margin-bottom:10px;
-}
-
-.week-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:8px;
-}
-
+.week-nav{display:flex;justify-content:center;gap:20px;margin-bottom:10px;}
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;}
 .week-day{
-  background:#fff;
-  border-radius:12px;
-  padding:8px;
-  min-height:160px;
-  border-top:6px solid var(--menta);
+  background:#fff;border-radius:12px;padding:8px;
+  min-height:160px;border-top:6px solid var(--menta);
 }
-
-.week-day h4{
-  margin:0 0 6px;
-  font-size:13px;
-}
-
+.week-day h4{margin:0 0 6px;font-size:13px;}
 .week-event{
-  font-size:12px;
-  background:#eef8f3;
-  border-radius:6px;
-  padding:4px;
-  margin-bottom:4px;
-  display:flex;
-  justify-content:space-between;
-  gap:6px;
+  font-size:12px;background:#eef8f3;border-radius:6px;
+  padding:4px;margin-bottom:4px;
+  display:flex;justify-content:space-between;gap:6px;
 }
-
-.week-event button{
-  border:none;
-  background:none;
-  cursor:pointer;
-}
+.week-event button{border:none;background:none;cursor:pointer;}
 
 /* ================== MES ================== */
-
-.month-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:6px;
-}
-
+.month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
 .month-day{
-  background:#fff;
-  border-radius:10px;
-  padding:6px;
-  min-height:90px;
-  border-top:4px solid var(--menta);
+  background:#fff;border-radius:10px;padding:6px;
+  min-height:90px;border-top:4px solid var(--menta);
   font-size:12px;
 }
-
 .month-event{
-  margin-top:4px;
-  border-radius:6px;
-  padding:2px 4px;
-  font-size:11px;
-  display:flex;
-  justify-content:space-between;
+  margin-top:4px;border-radius:6px;
+  padding:2px 4px;font-size:11px;
+  display:flex;justify-content:space-between;
 }
 
 /* ================== SEMESTRE ================== */
+.semester{display:grid;grid-template-columns:1fr;gap:20px;}
+.semester-month{background:#fff;border-radius:16px;padding:10px;}
+.semester-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;font-size:11px;}
 
-.semester{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:20px;
-}
-
-.semester-month{
-  background:#fff;
-  border-radius:16px;
-  padding:10px;
-}
-
-.semester-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:4px;
-  font-size:11px;
-}
-
+/* 🔥 CLAVE PARA BARRAS MÚLTIPLES */
 .semester-day{
   border-radius:6px;
   padding:4px;
   background:#f5f5f5;
-  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
 }
 
-/* ================== BARRA SEMESTRE ================== */
+/* ================== BARRAS ROADMAP ================== */
 .roadbar{
-  position:absolute;
-  inset:2px;
-  border-radius:6px;
+  width:100%;
+  height:6px;
+  border-radius:4px;
   opacity:.85;
   cursor:pointer;
 }
 
-/* ================== COLORES PROYECTOS ================== */
+/* ================== COLORES ================== */
 .cat-DesdeCeroLatam{background:var(--menta);}
 .cat-RelazoApp{background:var(--lila);}
 .cat-ComoSucedio{background:var(--salmon);}
 .cat-SegundoLibro{background:var(--azul);}
 .cat-VidaEnEuropa{background:var(--ocre);}
 
-/* ================== BURBUJA INFO ================== */
+/* ================== BURBUJA ================== */
 #semesterInfo{
   position:fixed;
   background:#fff;
@@ -228,16 +142,22 @@ header{
   border-radius:10px;
   box-shadow:0 6px 18px rgba(0,0,0,.15);
   display:none;
-  max-width:260px;
+  max-width:300px;
   font-size:14px;
   z-index:9999;
 }
 
-/* ================== MODAL SEMESTRE ================== */
+#semesterInfo button{
+  margin-top:6px;
+  margin-right:6px;
+  font-size:12px;
+}
+
+/* ================== MODAL ================== */
 #semesterModal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.3);
+  background:rgba(0,0,0,.3);
   display:none;
   justify-content:center;
   align-items:center;
@@ -253,7 +173,6 @@ header{
 }
 </style>
 </head>
-
 <body>
 
 <header>🌱 Mi espacio</header>
@@ -266,6 +185,7 @@ header{
   <button class="tab" onclick="openTab('projects')">Proyectos</button>
   <button class="tab" onclick="openTab('health')">Salud</button>
 </div>
+
 <!-- ================== DÍA ================== -->
 <div id="day" class="content active">
   <div class="day-header">
@@ -302,7 +222,13 @@ header{
 <!-- ================== SEMESTRE ================== -->
 <div id="semester" class="content">
   <div id="semesterView" class="semester"></div>
-  <div id="semesterInfo"></div>
+
+  <!-- 🔹 Burbuja de información -->
+  <div id="semesterInfo">
+    <div id="semesterInfoContent"></div>
+    <button onclick="editSemesterEvent()">✏️ Editar</button>
+    <button onclick="deleteSemesterEvent()">🗑 Eliminar</button>
+  </div>
 </div>
 
 <!-- ================== OTRAS ================== -->
@@ -312,7 +238,7 @@ header{
 <!-- ================== MODAL SEMESTRE ================== -->
 <div id="semesterModal">
   <div class="modal-box">
-    <h4>Nuevo proyecto</h4>
+    <h4 id="semesterModalTitle">Nuevo proyecto</h4>
 
     <label><input type="checkbox" value="DesdeCeroLatam"> DesdeCeroLatam</label><br>
     <label><input type="checkbox" value="RelazoApp"> RelazoApp</label><br>
@@ -336,6 +262,9 @@ let currentMonth = new Date();
 let semesterStart = new Date(currentMonth.getFullYear(), 0, 1);
 
 let events = JSON.parse(localStorage.getItem("events") || "[]");
+
+/* 👉 referencia al evento seleccionado en semestre */
+let selectedSemesterEvent = null;
 
 /* ================== UTILIDADES ================== */
 function saveEvents(){
@@ -408,7 +337,7 @@ function renderWeek(){
         const ev=document.createElement("div");
         ev.className="week-event";
         ev.innerHTML=`
-          ${e.text || ""} ${e.hour||""}
+          ${e.text||""} ${e.hour||""}
           <button onclick="deleteEvent(${idx})">🗑</button>
         `;
         dayDiv.appendChild(ev);
@@ -446,7 +375,7 @@ function renderMonth(){
       const ev=document.createElement("div");
       ev.className="month-event "+(e.class||"");
       ev.innerHTML=`
-        ${e.text || ""}${e.hour?" ⏰"+e.hour:""}
+        ${e.text||""}${e.hour?" ⏰"+e.hour:""}
         <span onclick="deleteEvent(${idx})">🗑</span>
       `;
       cell.appendChild(ev);
@@ -475,8 +404,8 @@ function addMonthEvent(date){
   }
 
   events.push({date:formatDate(date),text,hour,class:cls});
-  saveEvents(); 
-  renderMonth(); 
+  saveEvents();
+  renderMonth();
   renderWeek();
 }
 
@@ -520,7 +449,58 @@ function renderSemester(){
   }
 }
 
-/* ================== SEMESTRE · MODAL ================== */
+/* ================== BURBUJA SEMESTRE ================== */
+function showSemesterInfo(e,evt){
+  evt.stopPropagation();
+  selectedSemesterEvent = e;
+
+  const info=document.getElementById("semesterInfo");
+  document.getElementById("semesterInfoContent").innerHTML=`
+    <strong>Categoría:</strong> ${e.class.replace("cat-","")}<br>
+    <strong>Detalle:</strong> ${e.detail||"-"}<br>
+    <strong>Inicio:</strong> ${e.start}<br>
+    <strong>Fin:</strong> ${e.end}
+  `;
+
+  info.style.left=(evt.clientX+12)+"px";
+  info.style.top=(evt.clientY+12)+"px";
+  info.style.display="block";
+}
+
+document.addEventListener("click",()=>{
+  document.getElementById("semesterInfo").style.display="none";
+});
+
+/* ================== EDITAR / ELIMINAR ================== */
+function deleteSemesterEvent(){
+  if(!selectedSemesterEvent) return;
+  if(!confirm("¿Eliminar este evento?")) return;
+
+  events = events.filter(e=>e!==selectedSemesterEvent);
+  saveEvents();
+  renderSemester();
+  document.getElementById("semesterInfo").style.display="none";
+}
+
+function editSemesterEvent(){
+  if(!selectedSemesterEvent) return;
+
+  openSemesterModal();
+
+  semStart.value = selectedSemesterEvent.start;
+  semEnd.value = selectedSemesterEvent.end;
+  semDetail.value = selectedSemesterEvent.detail||"";
+
+  document
+    .querySelectorAll('#semesterModal input[type="checkbox"]')
+    .forEach(c=>{
+      c.checked = ("cat-"+c.value) === selectedSemesterEvent.class;
+    });
+
+  events = events.filter(e=>e!==selectedSemesterEvent);
+}
+
+/* ================== MODAL ================== */
 function openSemesterModal(){
   document.getElementById("semesterModal").style.display="flex";
 }
@@ -561,35 +541,13 @@ function saveSemesterEvent(){
   renderSemester();
 }
 
-/* ================== SEMESTRE · BURBUJA ================== */
-function showSemesterInfo(e,evt){
-  evt.stopPropagation();
-  const info=document.getElementById("semesterInfo");
-
-  info.innerHTML=`
-    <strong>Categoría:</strong> ${e.class.replace("cat-","")}<br>
-    <strong>Detalle:</strong> ${e.detail||"-"}<br>
-    <strong>Inicio:</strong> ${e.start}<br>
-    <strong>Fin:</strong> ${e.end}
-  `;
-
-  info.style.left=(evt.clientX+12)+"px";
-  info.style.top=(evt.clientY+12)+"px";
-  info.style.display="block";
-}
-
-document.addEventListener("click",()=>{
-  const info=document.getElementById("semesterInfo");
-  if(info) info.style.display="none";
-});
-
-/* ================== BORRAR ================== */
+/* ================== BORRAR GENÉRICO ================== */
 function deleteEvent(idx){
   if(confirm("Eliminar evento?")){
     events.splice(idx,1);
     saveEvents();
-    renderWeek(); 
-    renderMonth(); 
+    renderWeek();
+    renderMonth();
     renderSemester();
   }
 }
@@ -600,34 +558,6 @@ renderWeek();
 renderMonth();
 renderSemester();
 </script>
-
-<style>
-/* ======= AJUSTES FINALES DE SEGURIDAD ======= */
-.week-event button,
-.month-event span {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 0.8rem;
-}
-
-.week-event button:hover,
-.month-event span:hover {
-  opacity: 0.6;
-}
-
-.roadbar {
-  width: 100%;
-  height: 6px;
-  border-radius: 4px;
-  margin-top: 2px;
-}
-
-/* Scroll suave para iPad */
-body {
-  -webkit-overflow-scrolling: touch;
-}
-</style>
 
 </body>
 </html>
