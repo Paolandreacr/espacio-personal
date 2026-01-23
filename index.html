@@ -11,9 +11,9 @@
   --lila:#c6b7e2;
   --menta:#bfe6d3;
   --menta-fuerte:#9fd9c1;
-  --menta-oscura:#6fa8a1;
-  --salmon:#f6c1b5;
-  --ocre:#e6c46a;
+  --salmon:#f4b6a8;
+  --azul:#b7d8f4;
+  --ocre:#f1d18a;
   --texto:#4a4a4a;
 }
 
@@ -44,6 +44,7 @@ header{
   padding:8px 14px;
   border-radius:20px;
   cursor:pointer;
+  white-space:nowrap;
 }
 
 .tab.active{
@@ -51,10 +52,17 @@ header{
   font-weight:600;
 }
 
-.content{display:none;padding:16px;}
-.content.active{display:block}
+.content{
+  display:none;
+  padding:16px;
+}
 
-/* -------- DÍA -------- */
+.content.active{
+  display:block;
+}
+
+/* ================== DÍA ================== */
+
 .day-header{
   display:flex;
   justify-content:space-between;
@@ -71,7 +79,7 @@ header{
 .intention{
   margin:12px 0;
   font-style:italic;
-  color:#b6a8e0;
+  color:#9a8bc7;
 }
 
 .hour-block{
@@ -96,7 +104,8 @@ header{
   padding:6px;
 }
 
-/* -------- SEMANA -------- */
+/* ================== SEMANA ================== */
+
 .week-nav{
   display:flex;
   justify-content:center;
@@ -114,8 +123,13 @@ header{
   background:#fff;
   border-radius:12px;
   padding:8px;
-  min-height:140px;
+  min-height:160px;
   border-top:6px solid var(--menta);
+}
+
+.week-day h4{
+  margin:0 0 6px;
+  font-size:13px;
 }
 
 .week-event{
@@ -126,397 +140,390 @@ header{
   margin-bottom:4px;
   display:flex;
   justify-content:space-between;
+  gap:6px;
 }
 
-/* -------- MES -------- */
-.month-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.calendar{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:8px;
-}
-
-.day-name{
-  text-align:center;
-  font-weight:600;
-}
-
-.day{
-  background:#fff;
-  border-radius:12px;
-  padding:6px;
-  min-height:90px;
+.week-event button{
+  border:none;
+  background:none;
   cursor:pointer;
 }
 
-.event{
-  margin-top:4px;
-  padding:3px 6px;
-  border-radius:6px;
-  font-size:11px;
-  display:flex;
-  justify-content:space-between;
-}
-
-.birthday{background:var(--salmon)}
-.medical{background:var(--ocre)}
-.vet{background:var(--menta-oscura);color:white}
-
-/* -------- SEMESTRE / ROADMAP -------- */
-.semester-container{
-  display:flex;
-  flex-direction:column;
-  gap:24px;
-}
-
-.month-block{
-  background:#fff;
-  border-radius:16px;
-  padding:12px;
-}
-
-.month-title{
-  font-weight:600;
-  margin-bottom:6px;
-}
-
-.weekdays{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  font-size:11px;
-  text-align:center;
-  margin-bottom:6px;
-}
+/* ================== MES ================== */
 
 .month-grid{
   display:grid;
   grid-template-columns:repeat(7,1fr);
-  gap:4px;
+  gap:6px;
 }
 
 .month-day{
-  height:26px;
-  font-size:10px;
-  text-align:center;
+  background:#fff;
+  border-radius:10px;
+  padding:6px;
+  min-height:90px;
+  border-top:4px solid var(--menta);
+  font-size:12px;
 }
 
-.bar{
+.month-event{
   margin-top:4px;
-  border-radius:8px;
-  padding:4px;
+  border-radius:6px;
+  padding:2px 4px;
   font-size:11px;
-  cursor:pointer;
-  background:var(--menta);
+  display:flex;
+  justify-content:space-between;
 }
+
+/* ================== SEMESTRE ================== */
+
+.semester{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:20px;
+}
+
+.semester-month{
+  background:#fff;
+  border-radius:16px;
+  padding:10px;
+}
+
+.semester-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:4px;
+  font-size:11px;
+}
+
+.semester-day{
+  border-radius:6px;
+  padding:4px;
+  background:#f5f5f5;
+  position:relative;
+}
+
+.roadbar{
+  position:absolute;
+  inset:2px;
+  border-radius:6px;
+  opacity:.85;
+}
+
+/* ================== COLORES PROYECTOS ================== */
+
+.cat-DesdeCeroLatam{background:var(--menta);}
+.cat-RelazoApp{background:var(--lila);}
+.cat-ComoSucedio{background:var(--salmon);}
+.cat-SegundoLibro{background:var(--azul);}
+.cat-VidaEnEuropa{background:var(--ocre);}
 </style>
 </head>
 
 <body>
 
-<header>🌱 New Beginning Planner</header>
+<header>🌱 Mi espacio</header>
 
 <div class="tabs">
-  <button class="tab active" onclick="showTab('day')">Día</button>
-  <button class="tab" onclick="showTab('week')">Semana</button>
-  <button class="tab" onclick="showTab('month')">Mes</button>
-  <button class="tab" onclick="showTab('semester')">Semestre</button>
-  <button class="tab" onclick="showTab('projects')">Proyectos</button>
-  <button class="tab" onclick="showTab('health')">Salud</button>
+  <button class="tab active" onclick="openTab('day')">Día</button>
+  <button class="tab" onclick="openTab('week')">Semana</button>
+  <button class="tab" onclick="openTab('month')">Mes</button>
+  <button class="tab" onclick="openTab('semester')">Semestre</button>
+  <button class="tab" onclick="openTab('projects')">Proyectos</button>
+  <button class="tab" onclick="openTab('health')">Salud</button>
 </div>
 
-<!-- ---------- DÍA ---------- -->
+<!-- ================== DÍA ================== -->
 <div id="day" class="content active">
   <div class="day-header">
     <div class="date-nav">
-      <button onclick="changeDay(-1)">⬅</button>
-      <span id="dayTitle"></span>
-      <button onclick="changeDay(1)">➡</button>
+      <button onclick="changeDay(-1)">←</button>
+      <span id="currentDate"></span>
+      <button onclick="changeDay(1)">→</button>
     </div>
   </div>
 
   <div class="intention">
-    Intención del día:
-    <input type="text" id="dayIntention">
+    Intención del día
+    <input type="text" id="dayIntention" style="width:100%;margin-top:6px">
   </div>
 
-  <div id="daySchedule"></div>
+  <div id="hours"></div>
 </div>
 
-<!-- ---------- SEMANA ---------- -->
+<!-- ================== SEMANA ================== -->
 <div id="week" class="content">
   <div class="week-nav">
-    <button onclick="changeWeek(-1)">⬅ Semana</button>
-    <button onclick="changeWeek(1)">Semana ➡</button>
+    <button onclick="changeWeek(-1)">↑</button>
+    <strong>Semana</strong>
+    <button onclick="changeWeek(1)">↓</button>
   </div>
   <div class="week-grid" id="weekGrid"></div>
 </div>
 
-<!-- ---------- MES ---------- -->
+<!-- ================== MES ================== -->
 <div id="month" class="content">
-  <div class="month-header">
-    <button onclick="changeMonth(-1)">⬅</button>
-    <h3 id="monthTitle"></h3>
-    <button onclick="changeMonth(1)">➡</button>
-  </div>
-
-  <div class="calendar" id="calendar"></div>
+  <div id="monthGrid" class="month-grid"></div>
 </div>
 
-<!-- ---------- SEMESTRE ---------- -->
+<!-- ================== SEMESTRE ================== -->
 <div id="semester" class="content">
-  <div class="month-header">
-    <button onclick="changeSemester(-1)">⬅</button>
-    <h3 id="semesterTitle"></h3>
-    <button onclick="changeSemester(1)">➡</button>
-  </div>
-
-  <div class="semester-container" id="semesterContainer"></div>
+  <div id="semesterView" class="semester"></div>
 </div>
 
-<!-- ---------- OTROS ---------- -->
-<div id="projects" class="content">
-  <p>📁 Área de proyectos (en construcción)</p>
-</div>
-
-<div id="health" class="content">
-  <p>🧠 Área de salud (en construcción)</p>
-</div>
-
-<!-- ---------- MODAL EVENTOS ---------- -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <h3>Evento</h3>
-
-    <label>Categoría</label>
-    <select id="eventCategory" multiple>
-      <option value="DesdeCeroLatam">DesdeCeroLatam</option>
-      <option value="RelazoApp">RelazoApp</option>
-      <option value="ComoSucedio">Cómo Sucedió</option>
-      <option value="SegundoLibro">Segundo Libro</option>
-      <option value="VidaEuropa">Vida en Europa</option>
-    </select>
-
-    <label>Detalle</label>
-    <input type="text" id="eventDetail">
-
-    <label>Fecha inicio</label>
-    <input type="date" id="eventStart">
-
-    <label>Fecha fin</label>
-    <input type="date" id="eventEnd">
-
-    <button onclick="saveBar()">Guardar</button>
-    <button onclick="deleteBar()">Eliminar</button>
-  </div>
-</div>
+<!-- ================== OTRAS ================== -->
+<div id="projects" class="content">🎯 Proyectos (en desarrollo)</div>
+<div id="health" class="content">💚 Salud (en desarrollo)</div>
 
 <script>
-let today = new Date();
-let semesterBase = new Date();
-let events = [];
+/* ================== ESTADO GLOBAL ================== */
+let currentDay = new Date();
+let currentWeekOffset = 0;
+let currentMonth = new Date();
+let semesterStart = new Date(currentMonth.getFullYear(), 0, 1);
 
-const colors = {
-  DesdeCeroLatam: "var(--menta)",
-  RelazoApp: "var(--lila)",
-  ComoSucedio: "var(--salmon)",
-  SegundoLibro: "#9ad0ec",
-  VidaEuropa: "var(--ocre)"
-};
+let events = JSON.parse(localStorage.getItem("events") || "[]");
 
-function showTab(id){
-  document.querySelectorAll('.content').forEach(c=>c.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
+/* ================== UTILIDADES ================== */
+function saveEvents(){
+  localStorage.setItem("events", JSON.stringify(events));
 }
 
-/* ---------- DÍA ---------- */
+function formatDate(d){
+  return d.toISOString().split("T")[0];
+}
+
+function openTab(id){
+  document.querySelectorAll(".content").forEach(c=>c.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  event.target.classList.add("active");
+}
+
+/* ================== DÍA ================== */
 function renderDay(){
-  document.getElementById('dayTitle').innerText = today.toDateString();
-  const container = document.getElementById('daySchedule');
-  container.innerHTML = "";
+  document.getElementById("currentDate").textContent =
+    currentDay.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});
+
+  const container = document.getElementById("hours");
+  container.innerHTML="";
+
   for(let h=6;h<=22;h++){
-    const block = document.createElement('div');
+    const block=document.createElement("div");
     block.className="hour-block";
-    block.innerHTML=`<strong>${h}:00</strong>
+    block.innerHTML=`
+      <strong>${h}:00</strong>
+      <label style="float:right">
+        <input type="checkbox" onchange="toggleWeekVisible(this,'${formatDate(currentDay)}',${h})">
+        Mostrar en semana
+      </label>
       <div class="half-hour">
-        <input type="text" placeholder="Actividad">
-      </div>`;
+        <input type="checkbox">
+        <input type="text" placeholder=":00">
+      </div>
+      <div class="half-hour">
+        <input type="checkbox">
+        <input type="text" placeholder=":30">
+      </div>
+    `;
     container.appendChild(block);
   }
 }
-function changeDay(d){today.setDate(today.getDate()+d);renderDay();}
 
-/* ---------- SEMANA ---------- */
+function changeDay(delta){
+  currentDay.setDate(currentDay.getDate()+delta);
+  renderDay();
+}
+
+/* ================== SEMANA ================== */
 function renderWeek(){
-  const grid=document.getElementById('weekGrid');
+  const grid=document.getElementById("weekGrid");
   grid.innerHTML="";
-  let start=new Date(today);
-  start.setDate(start.getDate()-start.getDay()+1);
+  const base=new Date();
+  base.setDate(base.getDate()-base.getDay()+1+(currentWeekOffset*7));
+
   for(let i=0;i<7;i++){
-    const d=new Date(start);
-    d.setDate(start.getDate()+i);
-    const el=document.createElement('div');
-    el.className="week-day";
-    el.innerHTML=`<strong>${d.toDateString()}</strong>`;
-    grid.appendChild(el);
+    const d=new Date(base);
+    d.setDate(base.getDate()+i);
+    const dayDiv=document.createElement("div");
+    dayDiv.className="week-day";
+    dayDiv.innerHTML=`<h4>${d.toLocaleDateString("es-ES",{weekday:"short",day:"numeric"})}</h4>`;
+
+    events
+      .filter(e=>e.date===formatDate(d) && e.showWeek)
+      .forEach((e,idx)=>{
+        const ev=document.createElement("div");
+        ev.className="week-event";
+        ev.innerHTML=`
+          ${e.text} ${e.hour||""}
+          <button onclick="deleteEvent(${idx})">🗑</button>
+        `;
+        dayDiv.appendChild(ev);
+      });
+
+    grid.appendChild(dayDiv);
   }
 }
-function changeWeek(d){today.setDate(today.getDate()+7*d);renderWeek();}
 
-/* ---------- MES ---------- */
+function changeWeek(delta){
+  currentWeekOffset+=delta;
+  renderWeek();
+}
+
+/* ================== MES ================== */
 function renderMonth(){
-  const cal=document.getElementById('calendar');
-  cal.innerHTML="";
-  const year=today.getFullYear(),month=today.getMonth();
-  document.getElementById('monthTitle').innerText=today.toLocaleString('es',{month:'long',year:'numeric'});
+  const grid=document.getElementById("monthGrid");
+  grid.innerHTML="";
+  const y=currentMonth.getFullYear();
+  const m=currentMonth.getMonth();
+  const first=new Date(y,m,1);
+  const start=(first.getDay()+6)%7;
+  const days=new Date(y,m+1,0).getDate();
 
-  ["L","M","X","J","V","S","D"].forEach(d=>{
-    const n=document.createElement('div');
-    n.className="day-name";n.innerText=d;cal.appendChild(n);
-  });
+  for(let i=0;i<start;i++) grid.appendChild(document.createElement("div"));
 
-  const first=new Date(year,month,1);
-  let start=(first.getDay()+6)%7;
-  for(let i=0;i<start;i++)cal.appendChild(document.createElement('div'));
-
-  const days=new Date(year,month+1,0).getDate();
   for(let d=1;d<=days;d++){
-    const cell=document.createElement('div');
-    cell.className="day";
+    const date=new Date(y,m,d);
+    const cell=document.createElement("div");
+    cell.className="month-day";
     cell.innerHTML=`<strong>${d}</strong>`;
-    cal.appendChild(cell);
-  }
-}
-function changeMonth(d){today.setMonth(today.getMonth()+d);renderMonth();}
+    cell.onclick=()=>addMonthEvent(date);
 
-/* ---------- SEMESTRE / ROADMAP ---------- */
-let selectedBar = null;
+    events.filter(e=>e.date===formatDate(date)).forEach((e,idx)=>{
+      const ev=document.createElement("div");
+      ev.className="month-event "+(e.class||"");
+      ev.innerHTML=`
+        ${e.text}${e.hour?" ⏰"+e.hour:""}
+        <span onclick="deleteEvent(${idx})">🗑</span>
+      `;
+      cell.appendChild(ev);
+    });
 
-function renderSemester(){
-  const container = document.getElementById("semesterContainer");
-  container.innerHTML = "";
-
-  const base = new Date(semesterBase);
-  base.setDate(1);
-
-  document.getElementById("semesterTitle").innerText =
-    base.toLocaleString("es", { month: "long", year: "numeric" });
-
-  const daysHeader = document.createElement("div");
-  daysHeader.className = "weekdays";
-  ["L","M","X","J","V","S","D"].forEach(d=>{
-    const s=document.createElement("span");
-    s.innerText=d;
-    daysHeader.appendChild(s);
-  });
-  container.appendChild(daysHeader);
-
-  const grid = document.createElement("div");
-  grid.className = "semester-grid";
-
-  let startDay = new Date(base);
-  let offset = (startDay.getDay() + 6) % 7;
-  startDay.setDate(startDay.getDate() - offset);
-
-  for(let i=0;i<42;i++){
-    const cellDate = new Date(startDay);
-    cellDate.setDate(startDay.getDate()+i);
-
-    const cell = document.createElement("div");
-    cell.className = "semester-day";
-    cell.innerHTML = `<small>${cellDate.getDate()}</small>`;
-    cell.onclick = ()=>openModal(cellDate);
     grid.appendChild(cell);
   }
-
-  container.appendChild(grid);
-  renderBars(grid, startDay);
 }
 
-function renderBars(grid,start){
-  events.forEach(ev=>{
-    const s=new Date(ev.start);
-    const e=new Date(ev.end);
-    const days=(e-s)/(1000*60*60*24)+1;
+function addMonthEvent(date){
+  const type=prompt("Tipo: cumple / medico / vet");
+  if(!type) return;
 
-    const index=Math.round((s-start)/(1000*60*60*24));
-    if(index<0||index>=42) return;
+  let cls="", text="", hour="";
+  if(type==="cumple"){
+    text=prompt("Nombre");
+    cls="";
+  }
+  if(type==="medico"){
+    text="⚠ Cita médica";
+    hour=prompt("Hora?");
+    cls="";
+  }
+  if(type==="vet"){
+    text="⚠ Vet";
+    hour=prompt("Hora?");
+    cls="cat-DesdeCeroLatam";
+  }
 
-    const bar=document.createElement("div");
-    bar.className="bar";
-    bar.style.gridColumn=`${index+1} / span ${days}`;
-    bar.style.background=colors[ev.category[0]]||"#ccc";
-    bar.innerText=ev.detail||ev.category.join(", ");
+  events.push({date:formatDate(date),text,hour,class:cls});
+  saveEvents(); renderMonth(); renderWeek();
+}
 
-    bar.onclick=(x)=>{
-      x.stopPropagation();
-      selectedBar=ev;
-      openModal(s,ev);
-    };
-    grid.appendChild(bar);
+/* ================== SEMESTRE ================== */
+function renderSemester(){
+  const cont=document.getElementById("semesterView");
+  cont.innerHTML="";
+
+  for(let m=0;m<6;m++){
+    const month=new Date(semesterStart.getFullYear(),semesterStart.getMonth()+m,1);
+    const box=document.createElement("div");
+    box.className="semester-month";
+    box.innerHTML=`<h4>${month.toLocaleDateString("es-ES",{month:"long"})}</h4>`;
+
+    const grid=document.createElement("div");
+    grid.className="semester-grid";
+
+    const days=new Date(month.getFullYear(),month.getMonth()+1,0).getDate();
+    for(let d=1;d<=days;d++){
+      const cell=document.createElement("div");
+      cell.className="semester-day";
+      cell.textContent=d;
+
+      events
+        .filter(e=>e.start && e.end &&
+          new Date(e.start)<=new Date(month.getFullYear(),month.getMonth(),d) &&
+          new Date(e.end)>=new Date(month.getFullYear(),month.getMonth(),d))
+        .forEach(e=>{
+          const bar=document.createElement("div");
+          bar.className="roadbar "+e.class;
+          cell.appendChild(bar);
+        });
+
+      cell.onclick=()=>addSemesterEvent(month,d);
+      grid.appendChild(cell);
+    }
+
+    box.appendChild(grid);
+    cont.appendChild(box);
+  }
+}
+
+function addSemesterEvent(month,d){
+  const cat=prompt("Categoria: DesdeCeroLatam / RelazoApp / ComoSucedio / SegundoLibro / VidaEnEuropa");
+  const start=prompt("Fecha inicio YYYY-MM-DD");
+  const end=prompt("Fecha fin YYYY-MM-DD");
+  const detail=prompt("Detalle");
+
+  if(!cat||!start||!end) return;
+
+  events.push({
+    start,end,detail,
+    class:"cat-"+cat
   });
+  saveEvents(); renderSemester();
 }
 
-function openModal(date,ev=null){
-  document.getElementById("modal").style.display="flex";
-  document.getElementById("eventStart").value = date.toISOString().split("T")[0];
-  document.getElementById("eventEnd").value =
-    ev ? ev.end : date.toISOString().split("T")[0];
-  document.getElementById("eventDetail").value = ev?ev.detail:"";
-
-  const sel=document.getElementById("eventCategory");
-  [...sel.options].forEach(o=>o.selected=ev?ev.category.includes(o.value):false);
-}
-
-function saveBar(){
-  const sel=[...eventCategory.selectedOptions].map(o=>o.value);
-  const ev={
-    category: sel,
-    detail: eventDetail.value,
-    start: eventStart.value,
-    end: eventEnd.value
-  };
-
-  if(selectedBar){
-    Object.assign(selectedBar,ev);
-    selectedBar=null;
-  } else {
-    events.push(ev);
+/* ================== BORRAR ================== */
+function deleteEvent(idx){
+  if(confirm("Eliminar evento?")){
+    events.splice(idx,1);
+    saveEvents();
+    renderWeek(); renderMonth(); renderSemester();
   }
-  closeModal();
-  renderSemester();
 }
 
-function deleteBar(){
-  if(selectedBar){
-    events=events.filter(e=>e!==selectedBar);
-    selectedBar=null;
-    renderSemester();
-  }
-  closeModal();
-}
-
-function closeModal(){
-  document.getElementById("modal").style.display="none";
-}
-
-function changeSemester(d){
-  semesterBase.setMonth(semesterBase.getMonth()+d);
-  renderSemester();
-}
-
-/* ---------- INIT ---------- */
+/* ================== INIT ================== */
 renderDay();
 renderWeek();
 renderMonth();
 renderSemester();
-
 </script>
+
+<style>
+/* ======= AJUSTES FINALES DE SEGURIDAD ======= */
+.week-event button,
+.month-event span {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.week-event button:hover,
+.month-event span:hover {
+  opacity: 0.6;
+}
+
+.roadbar {
+  width: 100%;
+  height: 6px;
+  border-radius: 4px;
+  margin-top: 2px;
+}
+
+/* Scroll suave para iPad */
+body {
+  -webkit-overflow-scrolling: touch;
+}
+</style>
+
 </body>
 </html>
