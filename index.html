@@ -11,6 +11,9 @@
   --lila:#c6b7e2;
   --menta:#bfe6d3;
   --menta-fuerte:#9fd9c1;
+  --salmon:#f6c1b5;
+  --ocre:#e6c46a;
+  --menta-osc:#6fa8a1;
   --texto:#4a4a4a;
 }
 
@@ -47,22 +50,14 @@ header{
   font-weight:600;
 }
 
-.content{display:none;padding:16px;}
-.content.active{display:block}
+.section{display:none;padding:16px;}
+.section.active{display:block}
 
 /* ---------- DÍA ---------- */
-
 .day-header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-}
-
-.date-nav button{
-  border:none;
-  background:none;
-  font-size:20px;
-  cursor:pointer;
 }
 
 .intention{
@@ -79,22 +74,7 @@ header{
   border-left:6px solid var(--menta);
 }
 
-.half-hour{
-  display:flex;
-  gap:6px;
-  align-items:center;
-  margin-top:6px;
-}
-
-.half-hour input[type="text"]{
-  flex:1;
-  border:1px solid #ddd;
-  border-radius:8px;
-  padding:6px;
-}
-
-/* ---------- SEMANA (solo lectura por ahora) ---------- */
-
+/* ---------- SEMANA ---------- */
 .week-grid{
   display:grid;
   grid-template-columns:repeat(7,1fr);
@@ -109,17 +89,53 @@ header{
   border-top:6px solid var(--menta);
 }
 
-.week-day h4{
-  margin:0 0 6px;
-  font-size:13px;
+/* ---------- MES ---------- */
+.month-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
 }
 
-.week-event{
-  font-size:12px;
-  background:#eef8f3;
-  border-radius:6px;
-  padding:4px;
-  margin-bottom:4px;
+.calendar{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:8px;
+}
+
+.day-name{
+  text-align:center;
+  font-weight:600;
+}
+
+.day{
+  background:white;
+  border-radius:14px;
+  padding:6px;
+  min-height:100px;
+  cursor:pointer;
+}
+
+.event{margin-top:4px;padding:4px 6px;border-radius:8px;font-size:11px;}
+.birthday{background:var(--salmon);}
+.medical{background:var(--ocre);}
+.vet{background:var(--menta-osc);color:white;}
+
+/* ---------- MODAL ---------- */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.4);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-content{
+  background:white;
+  padding:20px;
+  border-radius:18px;
+  width:300px;
 }
 </style>
 </head>
@@ -129,173 +145,113 @@ header{
 <header>🌱 Mi espacio</header>
 
 <div class="tabs">
-  <button class="tab active" onclick="openTab('day')">Día</button>
-  <button class="tab" onclick="openTab('week')">Semana</button>
+  <button class="tab active" onclick="showSection('day',this)">Día</button>
+  <button class="tab" onclick="showSection('week',this)">Semana</button>
+  <button class="tab" onclick="showSection('month',this)">Mes</button>
 </div>
 
 <!-- DÍA -->
-<div id="day" class="content active">
+<div id="day" class="section active">
   <div class="day-header">
-    <div class="date-nav">
-      <button onclick="changeDay(-1)">←</button>
-      <span id="currentDate"></span>
-      <button onclick="changeDay(1)">→</button>
-    </div>
+    <button onclick="changeDay(-1)">←</button>
+    <strong id="currentDate"></strong>
+    <button onclick="changeDay(1)">→</button>
   </div>
 
   <div class="intention">
     Intención del día...
-    <input id="intentionInput" type="text" style="width:100%" oninput="saveDayData()">
+    <input style="width:100%">
   </div>
 
   <div id="hours"></div>
 </div>
 
 <!-- SEMANA -->
-<div id="week" class="content">
+<div id="week" class="section">
   <div class="week-grid" id="weekGrid"></div>
 </div>
 
+<!-- MES -->
+<div id="month" class="section">
+  <div class="month-header">
+    <button onclick="changeMonth(-1)">⬅</button>
+    <h3 id="monthTitle"></h3>
+    <button onclick="changeMonth(1)">➡</button>
+  </div>
+  <div class="calendar" id="calendar"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h3>Agregar evento</h3>
+    <select id="eventType">
+      <option value="birthday">🎂 Cumpleaños</option>
+      <option value="medical">⚠️ Cita médica</option>
+      <option value="vet">⚠️ Veterinario</option>
+    </select>
+    <input id="eventText" placeholder="Descripción">
+    <input id="eventTime" type="time">
+    <button onclick="saveEvent()">Guardar</button>
+  </div>
+</div>
+
 <script>
-/* ========= CONFIG ========= */
-const USE_FIREBASE = false; // ← cuando quieras activar Firebase
-/* ========================== */
-
-let currentDay = new Date();
-let dayData = JSON.parse(localStorage.getItem("dayData")||"{}");
-let weekEvents = JSON.parse(localStorage.getItem("weekEvents")||"{}");
-
-/* ---------- UTIL ---------- */
-function formatDate(d){
-  return d.toLocaleDateString("es-ES",{day:"numeric",month:"long",year:"numeric"});
-}
-function dateKey(d){
-  return d.toISOString().split("T")[0];
-}
-
 /* ---------- TABS ---------- */
-function openTab(id){
-  document.querySelectorAll(".content").forEach(c=>c.classList.remove("active"));
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  event.target.classList.add("active");
+function showSection(id,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
 }
 
 /* ---------- DÍA ---------- */
+let currentDay=new Date();
 function renderDay(){
-  document.getElementById("currentDate").textContent = formatDate(currentDay);
-  const key=dateKey(currentDay);
-  if(!dayData[key]) dayData[key]={intention:"",hours:{}};
-  document.getElementById("intentionInput").value = dayData[key].intention;
+  currentDate.innerText=currentDay.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
 }
-
-function changeDay(n){
-  currentDay.setDate(currentDay.getDate()+n);
-  renderDay();
-  renderHours();
-}
-
-function renderHours(){
-  const c=document.getElementById("hours");
-  c.innerHTML="";
-  const key=dateKey(currentDay);
-  for(let h=4;h<=23;h++){
-    const b=document.createElement("div");
-    b.className="hour-block";
-    b.innerHTML=`<strong>${h}:00</strong>`;
-    ["00","30"].forEach(m=>{
-      const time=`${h}:${m}`;
-      if(!dayData[key].hours[time]){
-        dayData[key].hours[time]={text:"",done:false,show:false};
-      }
-      const d=dayData[key].hours[time];
-      const row=document.createElement("div");
-      row.className="half-hour";
-      row.innerHTML=`
-        <input type="checkbox" ${d.done?"checked":""}
-          onchange="toggleDone('${time}',this.checked)">
-        <input type="text" value="${d.text}"
-          oninput="updateText('${time}',this.value)">
-        <label>
-          <input type="checkbox" ${d.show?"checked":""}
-            onchange="toggleWeek(this,'${time}')">
-          mostrar en semana
-        </label>`;
-      b.appendChild(row);
-    });
-    c.appendChild(b);
-  }
-}
-
-function saveDayData(){
-  const key=dateKey(currentDay);
-  dayData[key].intention = document.getElementById("intentionInput").value;
-  localStorage.setItem("dayData",JSON.stringify(dayData));
-}
-
-function updateText(time,val){
-  dayData[dateKey(currentDay)].hours[time].text=val;
-  localStorage.setItem("dayData",JSON.stringify(dayData));
-}
-
-function toggleDone(time,val){
-  dayData[dateKey(currentDay)].hours[time].done=val;
-  localStorage.setItem("dayData",JSON.stringify(dayData));
-}
-
-/* ---------- SEMANA ---------- */
-function startOfWeek(d){
-  const n=new Date(d);
-  const day=n.getDay()||7;
-  n.setDate(n.getDate()-day+1);
-  return n;
-}
-
-function renderWeek(){
-  const grid=document.getElementById("weekGrid");
-  grid.innerHTML="";
-  let base=startOfWeek(new Date());
-
-  for(let i=0;i<7;i++){
-    const d=new Date(base);
-    d.setDate(base.getDate()+i);
-    const key=dateKey(d);
-
-    const col=document.createElement("div");
-    col.className="week-day";
-    col.innerHTML=`<h4>${d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"short"})}</h4>`;
-
-    (weekEvents[key]||[]).forEach(e=>{
-      col.innerHTML+=`<div class="week-event">🕒 ${e.time} – ${e.text}</div>`;
-    });
-
-    grid.appendChild(col);
-  }
-}
-
-/* ---------- CONEXIÓN DÍA → SEMANA ---------- */
-function toggleWeek(cb,time){
-  const text=dayData[dateKey(currentDay)].hours[time].text;
-  const key=dateKey(currentDay);
-  dayData[key].hours[time].show=cb.checked;
-
-  if(!weekEvents[key]) weekEvents[key]=[];
-
-  if(cb.checked){
-    weekEvents[key].push({time,text});
-  }else{
-    weekEvents[key]=weekEvents[key].filter(e=>e.time!==time||e.text!==text);
-  }
-
-  localStorage.setItem("dayData",JSON.stringify(dayData));
-  localStorage.setItem("weekEvents",JSON.stringify(weekEvents));
-  renderWeek();
-}
-
-/* ---------- INIT ---------- */
+function changeDay(n){currentDay.setDate(currentDay.getDate()+n);renderDay();}
 renderDay();
-renderHours();
-renderWeek();
+
+/* ---------- MES ---------- */
+let currentMonth=new Date();
+let selectedDay=null;
+const events={};
+
+function renderCalendar(){
+  calendar.innerHTML="";
+  monthTitle.innerText=currentMonth.toLocaleDateString('es-ES',{month:'long',year:'numeric'});
+
+  ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"].forEach(d=>{
+    calendar.innerHTML+=`<div class="day-name">${d}</div>`;
+  });
+
+  const first=new Date(currentMonth.getFullYear(),currentMonth.getMonth(),1);
+  const start=(first.getDay()+6)%7;
+  const days=new Date(currentMonth.getFullYear(),currentMonth.getMonth()+1,0).getDate();
+
+  for(let i=0;i<start;i++) calendar.innerHTML+="<div></div>";
+
+  for(let d=1;d<=days;d++){
+    const key=`${currentMonth.getFullYear()}-${currentMonth.getMonth()}-${d}`;
+    let html=`<div class="day" onclick="openModal(${d})"><strong>${d}</strong>`;
+    if(events[key]) events[key].forEach(e=>{
+      html+=`<div class="event ${e.type}">${e.text} ${e.time||""}</div>`;
+    });
+    html+="</div>";
+    calendar.innerHTML+=html;
+  }
+}
+function changeMonth(x){currentMonth.setMonth(currentMonth.getMonth()+x);renderCalendar();}
+function openModal(d){selectedDay=d;modal.style.display="flex";}
+function saveEvent(){
+  const key=`${currentMonth.getFullYear()}-${currentMonth.getMonth()}-${selectedDay}`;
+  if(!events[key]) events[key]=[];
+  events[key].push({type:eventType.value,text:eventText.value,time:eventTime.value});
+  modal.style.display="none";
+  renderCalendar();
+}
+renderCalendar();
 </script>
 
 </body>
