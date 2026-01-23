@@ -212,23 +212,43 @@ header{
   cursor:pointer;
 }
 
-/* ================== PROYECTOS ================== */
-
+/* ================== COLORES PROYECTOS ================== */
 .cat-DesdeCeroLatam{background:var(--menta);}
 .cat-RelazoApp{background:var(--lila);}
 .cat-ComoSucedio{background:var(--salmon);}
 .cat-SegundoLibro{background:var(--azul);}
 .cat-VidaEnEuropa{background:var(--ocre);}
 
-/* ================== RECUADRO INFO ================== */
+/* ================== BURBUJA INFO ================== */
 #semesterInfo{
+  position:fixed;
   background:#fff;
   border:1px solid #ccc;
   padding:10px;
-  margin-top:10px;
-  border-radius:8px;
+  border-radius:10px;
+  box-shadow:0 6px 18px rgba(0,0,0,.15);
   display:none;
-  max-width:300px;
+  max-width:260px;
+  font-size:14px;
+  z-index:9999;
+}
+
+/* ================== MODAL SEMESTRE ================== */
+#semesterModal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.3);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.modal-box{
+  background:#fff;
+  padding:16px;
+  border-radius:12px;
+  width:260px;
   font-size:14px;
 }
 </style>
@@ -246,7 +266,6 @@ header{
   <button class="tab" onclick="openTab('projects')">Proyectos</button>
   <button class="tab" onclick="openTab('health')">Salud</button>
 </div>
-
 <!-- ================== DÍA ================== -->
 <div id="day" class="content active">
   <div class="day-header">
@@ -289,6 +308,26 @@ header{
 <!-- ================== OTRAS ================== -->
 <div id="projects" class="content">🎯 Proyectos (en desarrollo)</div>
 <div id="health" class="content">💚 Salud (en desarrollo)</div>
+
+<!-- ================== MODAL SEMESTRE ================== -->
+<div id="semesterModal">
+  <div class="modal-box">
+    <h4>Nuevo proyecto</h4>
+
+    <label><input type="checkbox" value="DesdeCeroLatam"> DesdeCeroLatam</label><br>
+    <label><input type="checkbox" value="RelazoApp"> RelazoApp</label><br>
+    <label><input type="checkbox" value="ComoSucedio"> ComoSucedio</label><br>
+    <label><input type="checkbox" value="SegundoLibro"> SegundoLibro</label><br>
+    <label><input type="checkbox" value="VidaEnEuropa"> VidaEnEuropa</label><br><br>
+
+    <input id="semStart" type="date"><br><br>
+    <input id="semEnd" type="date"><br><br>
+    <input id="semDetail" type="text" placeholder="Detalle"><br><br>
+
+    <button onclick="saveSemesterEvent()">Guardar</button>
+    <button onclick="closeSemesterModal()">Cancelar</button>
+  </div>
+</div>
 <script>
 /* ================== ESTADO GLOBAL ================== */
 let currentDay = new Date();
@@ -328,7 +367,7 @@ function renderDay(){
     block.innerHTML=`
       <strong>${h}:00</strong>
       <label style="float:right">
-        <input type="checkbox" onchange="toggleWeekVisible(this,'${formatDate(currentDay)}',${h})">
+        <input type="checkbox">
         Mostrar en semana
       </label>
       <div class="half-hour">
@@ -369,7 +408,7 @@ function renderWeek(){
         const ev=document.createElement("div");
         ev.className="week-event";
         ev.innerHTML=`
-          ${e.text} ${e.hour||""}
+          ${e.text || ""} ${e.hour||""}
           <button onclick="deleteEvent(${idx})">🗑</button>
         `;
         dayDiv.appendChild(ev);
@@ -407,7 +446,7 @@ function renderMonth(){
       const ev=document.createElement("div");
       ev.className="month-event "+(e.class||"");
       ev.innerHTML=`
-        ${e.text}${e.hour?" ⏰"+e.hour:""}
+        ${e.text || ""}${e.hour?" ⏰"+e.hour:""}
         <span onclick="deleteEvent(${idx})">🗑</span>
       `;
       cell.appendChild(ev);
@@ -424,12 +463,10 @@ function addMonthEvent(date){
   let cls="", text="", hour="";
   if(type==="cumple"){
     text=prompt("Nombre");
-    cls="";
   }
   if(type==="medico"){
     text="⚠ Cita médica";
     hour=prompt("Hora?");
-    cls="";
   }
   if(type==="vet"){
     text="⚠ Vet";
@@ -438,7 +475,9 @@ function addMonthEvent(date){
   }
 
   events.push({date:formatDate(date),text,hour,class:cls});
-  saveEvents(); renderMonth(); renderWeek();
+  saveEvents(); 
+  renderMonth(); 
+  renderWeek();
 }
 
 /* ================== SEMESTRE ================== */
@@ -468,11 +507,11 @@ function renderSemester(){
         .forEach(e=>{
           const bar=document.createElement("div");
           bar.className="roadbar "+e.class;
-          bar.onclick=()=>showSemesterInfo(e);
+          bar.onclick=(evt)=>showSemesterInfo(e,evt);
           cell.appendChild(bar);
         });
 
-      cell.onclick=()=>addSemesterEvent(month,d);
+      cell.onclick=()=>openSemesterModal();
       grid.appendChild(cell);
     }
 
@@ -481,47 +520,77 @@ function renderSemester(){
   }
 }
 
-function addSemesterEvent(month,d){
-  // Selección múltiple de categorías
-  const categories = ["DesdeCeroLatam","RelazoApp","ComoSucedio","SegundoLibro","VidaEnEuropa"];
-  let catSelected = prompt("Selecciona categorías separadas por coma:\n"+categories.join(","));
-  if(!catSelected) return;
-  const cats = catSelected.split(",").map(c=>c.trim()).filter(c=>categories.includes(c));
-  if(cats.length===0) return alert("Debe seleccionar al menos una categoría válida");
+/* ================== SEMESTRE · MODAL ================== */
+function openSemesterModal(){
+  document.getElementById("semesterModal").style.display="flex";
+}
 
-  const start = prompt("Fecha inicio YYYY-MM-DD");
-  const end = prompt("Fecha fin YYYY-MM-DD");
-  const detail = prompt("Detalle");
+function closeSemesterModal(){
+  document.getElementById("semesterModal").style.display="none";
+}
 
-  if(!start||!end) return;
+function saveSemesterEvent(){
+  const cats=[...document.querySelectorAll('#semesterModal input[type="checkbox"]:checked')]
+    .map(c=>c.value);
+
+  if(!cats.length){
+    alert("Selecciona al menos una categoría");
+    return;
+  }
+
+  const start=semStart.value;
+  const end=semEnd.value;
+  const detail=semDetail.value;
+
+  if(!start||!end){
+    alert("Fechas obligatorias");
+    return;
+  }
 
   cats.forEach(cat=>{
     events.push({
-      start,end,detail,
+      start,
+      end,
+      detail,
       class:"cat-"+cat
     });
   });
-  saveEvents(); renderSemester();
+
+  saveEvents();
+  closeSemesterModal();
+  renderSemester();
 }
 
-// Mostrar info de barra de color
-function showSemesterInfo(e){
-  const info = document.getElementById("semesterInfo");
-  info.style.display="block";
+/* ================== SEMESTRE · BURBUJA ================== */
+function showSemesterInfo(e,evt){
+  evt.stopPropagation();
+  const info=document.getElementById("semesterInfo");
+
   info.innerHTML=`
-    <strong>Categoria:</strong> ${e.class.replace("cat-","")}<br>
+    <strong>Categoría:</strong> ${e.class.replace("cat-","")}<br>
     <strong>Detalle:</strong> ${e.detail||"-"}<br>
     <strong>Inicio:</strong> ${e.start}<br>
     <strong>Fin:</strong> ${e.end}
   `;
+
+  info.style.left=(evt.clientX+12)+"px";
+  info.style.top=(evt.clientY+12)+"px";
+  info.style.display="block";
 }
+
+document.addEventListener("click",()=>{
+  const info=document.getElementById("semesterInfo");
+  if(info) info.style.display="none";
+});
 
 /* ================== BORRAR ================== */
 function deleteEvent(idx){
   if(confirm("Eliminar evento?")){
     events.splice(idx,1);
     saveEvents();
-    renderWeek(); renderMonth(); renderSemester();
+    renderWeek(); 
+    renderMonth(); 
+    renderSemester();
   }
 }
 
@@ -531,6 +600,7 @@ renderWeek();
 renderMonth();
 renderSemester();
 </script>
+
 <style>
 /* ======= AJUSTES FINALES DE SEGURIDAD ======= */
 .week-event button,
@@ -546,24 +616,11 @@ renderSemester();
   opacity: 0.6;
 }
 
-/* Barra del semestre */
 .roadbar {
   width: 100%;
   height: 6px;
   border-radius: 4px;
   margin-top: 2px;
-}
-
-/* Recuadro de información semestre */
-#semesterInfo {
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-  animation: fadeIn 0.2s ease-in-out;
-}
-
-/* Animación suave */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Scroll suave para iPad */
