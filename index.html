@@ -368,6 +368,36 @@ header{
   display:none;
   z-index:9999;
 }
+/* ===== KIT DE MARCA ===== */
+.brand-item{
+  border:1px solid #eee;
+  border-radius:10px;
+  margin-bottom:10px;
+  overflow:hidden;
+}
+
+.brand-header{
+  background:#f7f3ee;
+  padding:8px 10px;
+  font-size:13px;
+  font-weight:600;
+  display:flex;
+  justify-content:space-between;
+  cursor:pointer;
+}
+
+.brand-item textarea{
+  width:100%;
+  min-height:80px;
+  border:none;
+  padding:8px;
+  display:none;
+  font-size:13px;
+}
+
+.brand-item.open textarea{
+  display:block;
+}
 </style>
 </head>
 <body>
@@ -509,17 +539,62 @@ header{
       </p>
     </div>
 
-    <!-- Kit de marca -->
-    <div class="project-section">
-      <h4>🎨 Kit de marca</h4>
-      <ul style="font-size:12px;color:#777">
-        <li>Colores de marca</li>
-        <li>Tipografías</li>
-        <li>Logo</li>
-        <li>Imágenes</li>
-        <li>Banco de temas</li>
-      </ul>
+<!-- Kit de marca -->
+<div class="project-section">
+  <h4>🎨 Kit de marca</h4>
+
+  <div class="brand-item" data-key="colors">
+    <div class="brand-header" onclick="toggleBrand(this)">
+      🎨 Colores de marca
+      <button onclick="deleteBrand(event,'colors')">🗑</button>
     </div>
+    <textarea
+      placeholder="Paleta, códigos HEX, usos..."
+      oninput="saveBrand('colors', this.value)"></textarea>
+  </div>
+
+  <div class="brand-item" data-key="fonts">
+    <div class="brand-header" onclick="toggleBrand(this)">
+      🔤 Tipografías
+      <button onclick="deleteBrand(event,'fonts')">🗑</button>
+    </div>
+    <textarea
+      placeholder="Nombre de fuentes, usos, enlaces..."
+      oninput="saveBrand('fonts', this.value)"></textarea>
+  </div>
+
+  <div class="brand-item" data-key="logo">
+    <div class="brand-header" onclick="toggleBrand(this)">
+      🖼 Logo
+      <button onclick="deleteBrand(event,'logo')">🗑</button>
+    </div>
+    <textarea
+      placeholder="Versiones, notas, links..."
+      oninput="saveBrand('logo', this.value)"></textarea>
+  </div>
+
+  <div class="brand-item" data-key="images">
+    <div class="brand-header" onclick="toggleBrand(this)">
+      📷 Imágenes
+      <button onclick="deleteBrand(event,'images')">🗑</button>
+    </div>
+    <textarea
+      placeholder="Banco visual, referencias..."
+      oninput="saveBrand('images', this.value)"></textarea>
+  </div>
+
+  <div class="brand-item" data-key="topics">
+    <div class="brand-header" onclick="toggleBrand(this)">
+      🧠 Banco de temas
+      <button onclick="deleteBrand(event,'topics')">🗑</button>
+    </div>
+    <textarea
+      placeholder="Ideas, líneas editoriales..."
+      oninput="saveBrand('topics', this.value)"></textarea>
+  </div>
+
+</div>
+
 
   </div>
 </div>
@@ -920,6 +995,44 @@ renderWeek();
 renderMonth();
 renderSemester();
 renderProjects();
+/* ================== KIT DE MARCA ================== */
+
+function toggleBrand(header){
+  const box = header.parentElement;
+  box.classList.toggle("open");
+}
+
+function saveBrand(key, value){
+  if(!activeProject) return;
+  if(!activeProject.brandKit) activeProject.brandKit = {};
+  activeProject.brandKit[key] = value;
+  saveProjects();
+}
+
+function deleteBrand(event, key){
+  event.stopPropagation();
+  if(!activeProject || !activeProject.brandKit) return;
+  if(!confirm("¿Eliminar esta información?")) return;
+  delete activeProject.brandKit[key];
+  saveProjects();
+  renderProjectTasks();
+}
+
+function loadBrandKit(){
+  if(!activeProject || !activeProject.brandKit) return;
+  document.querySelectorAll(".brand-item").forEach(item=>{
+    const key = item.dataset.key;
+    const textarea = item.querySelector("textarea");
+    textarea.value = activeProject.brandKit[key] || "";
+  });
+}
+
+/* cargar kit al abrir proyecto */
+const originalOpenProject = openProject;
+openProject = function(id){
+  originalOpenProject(id);
+  setTimeout(loadBrandKit, 0);
+};
 </script>
 
 </body>
