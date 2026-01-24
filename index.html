@@ -62,158 +62,6 @@ header{
   display:block;
 }
 
-/* ================== DÍA ================== */
-.day-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.date-nav button{
-  border:none;
-  background:none;
-  font-size:20px;
-  cursor:pointer;
-}
-
-.intention{
-  margin:12px 0;
-  font-style:italic;
-  color:#9a8bc7;
-}
-
-.hour-block{
-  background:#fff;
-  border-radius:12px;
-  padding:10px;
-  margin-bottom:10px;
-  border-left:6px solid var(--menta);
-}
-
-.half-hour{
-  display:flex;
-  gap:6px;
-  align-items:center;
-  margin-top:6px;
-}
-
-.half-hour input[type="text"]{
-  flex:1;
-  border:1px solid #ddd;
-  border-radius:8px;
-  padding:6px;
-}
-
-/* ================== SEMANA ================== */
-.week-nav{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  margin-bottom:10px;
-}
-
-.week-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:8px;
-}
-
-.week-day{
-  background:#fff;
-  border-radius:12px;
-  padding:8px;
-  min-height:160px;
-  border-top:6px solid var(--menta);
-}
-
-.week-day h4{
-  margin:0 0 6px;
-  font-size:13px;
-}
-
-.week-event{
-  font-size:12px;
-  background:#eef8f3;
-  border-radius:6px;
-  padding:4px;
-  margin-bottom:4px;
-  display:flex;
-  justify-content:space-between;
-  gap:6px;
-}
-
-.week-event button{
-  border:none;
-  background:none;
-  cursor:pointer;
-}
-
-/* ================== MES ================== */
-.month-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:6px;
-}
-
-.month-day{
-  background:#fff;
-  border-radius:10px;
-  padding:6px;
-  min-height:90px;
-  border-top:4px solid var(--menta);
-  font-size:12px;
-}
-
-.month-event{
-  margin-top:4px;
-  border-radius:6px;
-  padding:2px 4px;
-  font-size:11px;
-  display:flex;
-  justify-content:space-between;
-}
-
-.month-cumple{background:var(--salmon);}
-.month-vet{background:var(--menta);}
-.month-medico{background:var(--azul);}
-
-/* ================== SEMESTRE ================== */
-.semester{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:20px;
-}
-
-.semester-month{
-  background:#fff;
-  border-radius:16px;
-  padding:10px;
-}
-
-.semester-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:4px;
-  font-size:11px;
-}
-
-.semester-day{
-  border-radius:6px;
-  padding:4px;
-  background:#f5f5f5;
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-}
-
-.roadbar{
-  width:100%;
-  height:6px;
-  border-radius:4px;
-  opacity:.85;
-  cursor:pointer;
-}
-
 /* ================== PROYECTOS ================== */
 .projects-header{
   display:flex;
@@ -234,20 +82,36 @@ header{
 
 .projects-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
-  gap:12px;
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:14px;
 }
 
+/* carpeta limpia */
 .project-folder{
-  background:#fff;
-  border-radius:12px;
-  padding:12px;
+  border-radius:14px;
+  padding:20px 10px;
   text-align:center;
   cursor:pointer;
+  position:relative;
+  font-weight:600;
+  box-shadow:0 4px 10px rgba(0,0,0,.05);
 }
 
-.project-folder .icon{
-  font-size:32px;
+/* acciones carpeta */
+.project-actions{
+  position:absolute;
+  top:6px;
+  right:6px;
+  display:flex;
+  gap:6px;
+}
+
+.project-actions button{
+  border:none;
+  background:rgba(255,255,255,.7);
+  border-radius:6px;
+  cursor:pointer;
+  font-size:12px;
 }
 
 /* colores carpetas */
@@ -261,7 +125,7 @@ header{
 .folder-ocre{background:var(--ocre);}
 .folder-beige{background:var(--beige);}
 
-/* subvista proyecto */
+/* ================== SUBVISTA PROYECTO ================== */
 .project-view{display:none;}
 .project-view.active{display:block;}
 
@@ -269,9 +133,9 @@ header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:10px;
-  border-radius:12px;
-  margin-bottom:12px;
+  padding:12px;
+  border-radius:14px;
+  margin-bottom:14px;
 }
 
 .close-project{
@@ -281,20 +145,54 @@ header{
   cursor:pointer;
 }
 
-.project-section{
-  background:#fff;
-  border-radius:12px;
-  padding:12px;
-  margin-bottom:12px;
+/* ================== PENDIENTES ================== */
+.task-input{
+  width:100%;
+  border:none;
+  border-bottom:1px solid #ccc;
+  padding:6px;
+  font-size:14px;
+  margin-bottom:10px;
 }
 
-/* ================== MODALES ================== */
-#monthModal,
-#semesterModal,
+.task-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+
+.task-row input[type="text"]{
+  border:none;
+  background:transparent;
+  flex:1;
+}
+
+.task-row.done input[type="text"]{
+  text-decoration:line-through;
+  opacity:.6;
+}
+
+.task-row button{
+  border:none;
+  background:none;
+  cursor:pointer;
+  font-size:12px;
+}
+
+/* ================== SECCIONES ================== */
+.project-section{
+  background:#fff;
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:14px;
+}
+
+/* ================== MODAL ================== */
 #projectModal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.3);
+  background:rgba(0,0,0,.35);
   display:none;
   justify-content:center;
   align-items:center;
@@ -304,19 +202,8 @@ header{
 .modal-box{
   background:#fff;
   padding:16px;
-  border-radius:12px;
+  border-radius:14px;
   width:260px;
-}
-
-/* ================== BURBUJA ================== */
-#semesterInfo{
-  position:fixed;
-  background:#fff;
-  border:1px solid #ccc;
-  padding:10px;
-  border-radius:10px;
-  display:none;
-  z-index:9999;
 }
 </style>
 </head>
@@ -366,56 +253,9 @@ header{
   <div id="monthGrid" class="month-grid"></div>
 </div>
 
-<!-- ================== MODAL MES ================== -->
-<div id="monthModal">
-  <div class="modal-box">
-    <h4>Nuevo evento</h4>
-
-    <label>Categoría</label>
-    <select id="monthCategory" onchange="handleMonthCategory()">
-      <option value="">Selecciona</option>
-      <option value="cumple">Cumpleaños</option>
-      <option value="vet">Vet</option>
-      <option value="medico">Médico</option>
-    </select>
-
-    <input id="monthDetail" type="text" placeholder="Detalle">
-    <input id="monthHour" type="time" style="display:none;">
-
-    <button onclick="saveMonthEvent()">Guardar</button>
-    <button onclick="closeMonthModal()">Cancelar</button>
-  </div>
-</div>
-
 <!-- ================== SEMESTRE ================== -->
 <div id="semester" class="content">
   <div id="semesterView" class="semester"></div>
-
-  <div id="semesterInfo">
-    <div id="semesterInfoContent"></div>
-    <button onclick="editSemesterEvent()">✏️ Editar</button>
-    <button onclick="deleteSemesterEvent()">🗑 Eliminar</button>
-  </div>
-</div>
-
-<!-- ================== MODAL SEMESTRE ================== -->
-<div id="semesterModal">
-  <div class="modal-box">
-    <h4>Nuevo proyecto</h4>
-
-    <label><input type="checkbox" value="DesdeCeroLatam"> DesdeCeroLatam</label><br>
-    <label><input type="checkbox" value="RelazoApp"> RelazoApp</label><br>
-    <label><input type="checkbox" value="ComoSucedio"> ComoSucedio</label><br>
-    <label><input type="checkbox" value="SegundoLibro"> SegundoLibro</label><br>
-    <label><input type="checkbox" value="VidaEnEuropa"> VidaEnEuropa</label><br><br>
-
-    <input id="semStart" type="date"><br><br>
-    <input id="semEnd" type="date"><br><br>
-    <input id="semDetail" type="text" placeholder="Detalle"><br><br>
-
-    <button onclick="saveSemesterEvent()">Guardar</button>
-    <button onclick="closeSemesterModal()">Cancelar</button>
-  </div>
 </div>
 
 <!-- ================== PROYECTOS ================== -->
@@ -428,22 +268,33 @@ header{
       <button class="add-project-btn" onclick="openProjectModal()">＋</button>
     </div>
 
-    <div class="projects-grid" id="projectsGrid"></div>
+    <div class="projects-grid" id="projectsGrid">
+      <!-- carpetas -->
+    </div>
   </div>
 
   <!-- Subvista proyecto -->
   <div id="projectView" class="project-view">
+
     <div class="project-view-header" id="projectViewHeader">
       <strong id="projectTitle"></strong>
       <button class="close-project" onclick="closeProjectView()">✖</button>
     </div>
 
+    <!-- Pendientes -->
     <div class="project-section">
       <h4>✅ Pendientes</h4>
+
+      <input
+        type="text"
+        class="task-input"
+        id="taskInput"
+        placeholder="Escribe y presiona Enter">
+
       <div id="projectTasks"></div>
-      <button onclick="addProjectTask()">＋</button>
     </div>
 
+    <!-- Documentos -->
     <div class="project-section">
       <h4>📂 Documentos importantes</h4>
       <p style="font-size:12px;color:#777">
@@ -451,6 +302,7 @@ header{
       </p>
     </div>
 
+    <!-- Kit de marca -->
     <div class="project-section">
       <h4>🎨 Kit de marca</h4>
       <ul style="font-size:12px;color:#777">
@@ -461,14 +313,14 @@ header{
         <li>Banco de temas</li>
       </ul>
     </div>
-  </div>
 
+  </div>
 </div>
 
-<!-- ================== MODAL NUEVO PROYECTO ================== -->
+<!-- ================== MODAL NUEVO / EDITAR PROYECTO ================== -->
 <div id="projectModal">
   <div class="modal-box">
-    <h4>Nuevo proyecto</h4>
+    <h4 id="projectModalTitle">Nuevo proyecto</h4>
 
     <input id="projectName" type="text" placeholder="Nombre del proyecto">
 
@@ -485,8 +337,10 @@ header{
       <option value="beige">Beige</option>
     </select>
 
-    <button onclick="saveProject()">Crear</button>
-    <button onclick="closeProjectModal()">Cancelar</button>
+    <div style="margin-top:10px;text-align:right">
+      <button onclick="saveProject()">Guardar</button>
+      <button onclick="closeProjectModal()">Cancelar</button>
+    </div>
   </div>
 </div>
 
@@ -494,229 +348,30 @@ header{
 <div id="health" class="content">💚 Salud (en desarrollo)</div>
 <script>
 /* ================== ESTADO GLOBAL ================== */
-let currentDay = new Date();
-let currentWeekOffset = 0;
-let currentMonth = new Date();
-let semesterStart = new Date(currentMonth.getFullYear(), 0, 1);
-
-let events = JSON.parse(localStorage.getItem("events") || "[]");
 let projects = JSON.parse(localStorage.getItem("projects") || "[]");
-
-let selectedSemesterEvent = null;
-let selectedMonthDate = null;
 let activeProject = null;
+let editingProjectId = null;
 
 /* ================== UTILIDADES ================== */
-function saveEvents(){
-  localStorage.setItem("events", JSON.stringify(events));
-}
-
 function saveProjects(){
   localStorage.setItem("projects", JSON.stringify(projects));
 }
 
-function formatDate(d){
-  return d.toISOString().split("T")[0];
-}
-
-function openTab(id){
-  document.querySelectorAll(".content").forEach(c=>c.classList.remove("active"));
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  event.target.classList.add("active");
-}
-
-/* ================== DÍA ================== */
-function renderDay(){
-  document.getElementById("currentDate").textContent =
-    currentDay.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});
-
-  const container = document.getElementById("hours");
-  container.innerHTML="";
-
-  for(let h=6;h<=22;h++){
-    const block=document.createElement("div");
-    block.className="hour-block";
-    block.innerHTML=`
-      <strong>${h}:00</strong>
-      <label style="float:right">
-        <input type="checkbox">
-        Mostrar en semana
-      </label>
-      <div class="half-hour">
-        <input type="checkbox">
-        <input type="text" placeholder=":00">
-      </div>
-      <div class="half-hour">
-        <input type="checkbox">
-        <input type="text" placeholder=":30">
-      </div>
-    `;
-    container.appendChild(block);
-  }
-}
-
-function changeDay(delta){
-  currentDay.setDate(currentDay.getDate()+delta);
-  renderDay();
-}
-
-/* ================== SEMANA ================== */
-function renderWeek(){
-  const grid=document.getElementById("weekGrid");
-  grid.innerHTML="";
-  const base=new Date();
-  base.setDate(base.getDate()-base.getDay()+1+(currentWeekOffset*7));
-
-  for(let i=0;i<7;i++){
-    const d=new Date(base);
-    d.setDate(base.getDate()+i);
-    const dayDiv=document.createElement("div");
-    dayDiv.className="week-day";
-    dayDiv.innerHTML=`<h4>${d.toLocaleDateString("es-ES",{weekday:"short",day:"numeric"})}</h4>`;
-
-    events
-      .filter(e=>e.date===formatDate(d) && e.showWeek)
-      .forEach((e,idx)=>{
-        const ev=document.createElement("div");
-        ev.className="week-event";
-        ev.innerHTML=`
-          ${e.text||""} ${e.hour||""}
-          <button onclick="deleteEvent(${idx})">🗑</button>
-        `;
-        dayDiv.appendChild(ev);
-      });
-
-    grid.appendChild(dayDiv);
-  }
-}
-
-function changeWeek(delta){
-  currentWeekOffset+=delta;
-  renderWeek();
-}
-
-/* ================== MES ================== */
-function renderMonth(){
-  const grid=document.getElementById("monthGrid");
-  grid.innerHTML="";
-  const y=currentMonth.getFullYear();
-  const m=currentMonth.getMonth();
-  const first=new Date(y,m,1);
-  const start=(first.getDay()+6)%7;
-  const days=new Date(y,m+1,0).getDate();
-
-  for(let i=0;i<start;i++) grid.appendChild(document.createElement("div"));
-
-  for(let d=1;d<=days;d++){
-    const date=new Date(y,m,d);
-    const cell=document.createElement("div");
-    cell.className="month-day";
-    cell.innerHTML=`<strong>${d}</strong>`;
-    cell.onclick=()=>openMonthModal(date);
-
-    events.filter(e=>e.date===formatDate(date)).forEach((e,idx)=>{
-      const ev=document.createElement("div");
-      ev.className="month-event "+(e.class||"");
-      ev.innerHTML=`
-        ${e.text||""}${e.hour?" ⏰"+e.hour:""}
-        <span onclick="deleteEvent(${idx})">🗑</span>
-      `;
-      cell.appendChild(ev);
-    });
-
-    grid.appendChild(cell);
-  }
-}
-
-/* ================== MODAL MES ================== */
-function openMonthModal(date){
-  selectedMonthDate=date;
-  monthCategory.value="";
-  monthDetail.value="";
-  monthHour.value="";
-  monthHour.style.display="none";
-  document.getElementById("monthModal").style.display="flex";
-}
-
-function closeMonthModal(){
-  document.getElementById("monthModal").style.display="none";
-}
-
-function handleMonthCategory(){
-  const cat=monthCategory.value;
-  monthHour.style.display=(cat==="vet"||cat==="medico")?"block":"none";
-}
-
-function saveMonthEvent(){
-  const cat=monthCategory.value;
-  const detail=monthDetail.value;
-  const hour=monthHour.value;
-
-  if(!cat||!detail) return alert("Completa los campos");
-
-  let text="", cls="";
-  if(cat==="cumple"){text="🎂 "+detail;cls="month-cumple";}
-  if(cat==="vet"){text="🐶 Vet: "+detail;cls="month-vet";}
-  if(cat==="medico"){text="🩺 Médico: "+detail;cls="month-medico";}
-
-  events.push({
-    date:formatDate(selectedMonthDate),
-    text,
-    hour,
-    class:cls
-  });
-
-  saveEvents();
-  closeMonthModal();
-  renderMonth();
-  renderWeek();
-}
-
-/* ================== SEMESTRE ================== */
-function renderSemester(){
-  const cont=document.getElementById("semesterView");
-  cont.innerHTML="";
-
-  for(let m=0;m<6;m++){
-    const month=new Date(semesterStart.getFullYear(),semesterStart.getMonth()+m,1);
-    const box=document.createElement("div");
-    box.className="semester-month";
-    box.innerHTML=`<h4>${month.toLocaleDateString("es-ES",{month:"long"})}</h4>`;
-
-    const grid=document.createElement("div");
-    grid.className="semester-grid";
-
-    const days=new Date(month.getFullYear(),month.getMonth()+1,0).getDate();
-    for(let d=1;d<=days;d++){
-      const cell=document.createElement("div");
-      cell.className="semester-day";
-      cell.textContent=d;
-
-      events.filter(e=>e.start&&e.end &&
-        new Date(e.start)<=new Date(month.getFullYear(),month.getMonth(),d) &&
-        new Date(e.end)>=new Date(month.getFullYear(),month.getMonth(),d)
-      ).forEach(e=>{
-        const bar=document.createElement("div");
-        bar.className="roadbar "+e.class;
-        bar.onclick=(evt)=>showSemesterInfo(e,evt);
-        cell.appendChild(bar);
-      });
-
-      cell.onclick=()=>openSemesterModal();
-      grid.appendChild(cell);
-    }
-
-    box.appendChild(grid);
-    cont.appendChild(box);
-  }
-}
-
 /* ================== PROYECTOS ================== */
-function openProjectModal(){
-  projectName.value="";
-  projectColor.value="rosado";
+function openProjectModal(project=null){
   projectModal.style.display="flex";
+
+  if(project){
+    projectModalTitle.textContent="Editar proyecto";
+    projectName.value=project.name;
+    projectColor.value=project.color;
+    editingProjectId=project.id;
+  }else{
+    projectModalTitle.textContent="Nuevo proyecto";
+    projectName.value="";
+    projectColor.value="rosado";
+    editingProjectId=null;
+  }
 }
 
 function closeProjectModal(){
@@ -726,35 +381,56 @@ function closeProjectModal(){
 function saveProject(){
   const name=projectName.value.trim();
   const color=projectColor.value;
-  if(!name) return alert("Ponle nombre");
 
-  projects.push({
-    id:Date.now(),
-    name,
-    color,
-    tasks:[],
-    documents:[],
-    brandKit:{}
-  });
+  if(!name){
+    alert("Ponle nombre al proyecto");
+    return;
+  }
+
+  if(editingProjectId){
+    const p=projects.find(p=>p.id===editingProjectId);
+    p.name=name;
+    p.color=color;
+  }else{
+    projects.push({
+      id:Date.now(),
+      name,
+      color,
+      tasks:[],
+      documents:[],
+      brandKit:{}
+    });
+  }
 
   saveProjects();
   closeProjectModal();
   renderProjects();
 }
 
+function deleteProject(id){
+  if(!confirm("¿Eliminar este proyecto?")) return;
+  projects=projects.filter(p=>p.id!==id);
+  saveProjects();
+  renderProjects();
+}
+
 function renderProjects(){
-  const grid=document.getElementById("projectsGrid");
-  grid.innerHTML="";
+  projectsGrid.innerHTML="";
 
   projects.forEach(p=>{
     const div=document.createElement("div");
     div.className=`project-folder folder-${p.color}`;
+
     div.innerHTML=`
-      <div class="icon">📁</div>
+      <div class="project-actions">
+        <button onclick="event.stopPropagation();openProjectModal(${JSON.stringify(p).replace(/"/g,'&quot;')})">✏️</button>
+        <button onclick="event.stopPropagation();deleteProject(${p.id})">🗑</button>
+      </div>
       <div>${p.name}</div>
     `;
+
     div.onclick=()=>openProject(p.id);
-    grid.appendChild(div);
+    projectsGrid.appendChild(div);
   });
 }
 
@@ -764,7 +440,7 @@ function openProject(id){
   projectView.classList.add("active");
   projectTitle.textContent=activeProject.name;
   projectViewHeader.className=`project-view-header folder-${activeProject.color}`;
-  renderProjectTasks();
+  renderTasks();
 }
 
 function closeProjectView(){
@@ -773,74 +449,56 @@ function closeProjectView(){
   activeProject=null;
 }
 
-function renderProjectTasks(){
+/* ================== PENDIENTES ================== */
+taskInput.addEventListener("keydown",e=>{
+  if(e.key==="Enter" && taskInput.value.trim()){
+    activeProject.tasks.push({
+      text:taskInput.value.trim(),
+      done:false
+    });
+    taskInput.value="";
+    saveProjects();
+    renderTasks();
+  }
+});
+
+function renderTasks(){
   projectTasks.innerHTML="";
+
   activeProject.tasks.forEach((t,idx)=>{
     const row=document.createElement("div");
+    row.className="task-row"+(t.done?" done":"");
+
     row.innerHTML=`
       <input type="checkbox" ${t.done?"checked":""}
         onchange="toggleTask(${idx})">
-      ${t.text}
+      <input type="text" value="${t.text}"
+        onchange="editTask(${idx},this.value)">
+      <button onclick="deleteTask(${idx})">🗑</button>
     `;
+
     projectTasks.appendChild(row);
   });
-}
-
-function addProjectTask(){
-  const text=prompt("Pendiente");
-  if(!text) return;
-  activeProject.tasks.push({text,done:false});
-  saveProjects();
-  renderProjectTasks();
 }
 
 function toggleTask(idx){
   activeProject.tasks[idx].done=!activeProject.tasks[idx].done;
   saveProjects();
+  renderTasks();
 }
 
-/* ================== SEMESTRE MODAL ================== */
-function openSemesterModal(){
-  semesterModal.style.display="flex";
+function editTask(idx,value){
+  activeProject.tasks[idx].text=value;
+  saveProjects();
 }
 
-function closeSemesterModal(){
-  semesterModal.style.display="none";
-}
-
-function saveSemesterEvent(){
-  const cats=[...semesterModal.querySelectorAll("input:checked")].map(c=>c.value);
-  if(!cats.length) return;
-
-  const start=semStart.value;
-  const end=semEnd.value;
-  const detail=semDetail.value;
-
-  cats.forEach(cat=>{
-    events.push({start,end,detail,class:"cat-"+cat});
-  });
-
-  saveEvents();
-  closeSemesterModal();
-  renderSemester();
-}
-
-/* ================== BORRAR ================== */
-function deleteEvent(idx){
-  if(confirm("Eliminar evento?")){
-    events.splice(idx,1);
-    saveEvents();
-    renderWeek();
-    renderMonth();
-    renderSemester();
-  }
+function deleteTask(idx){
+  activeProject.tasks.splice(idx,1);
+  saveProjects();
+  renderTasks();
 }
 
 /* ================== INIT ================== */
-renderDay();
-renderWeek();
-renderMonth();
-renderSemester();
 renderProjects();
 </script>
 </body>
