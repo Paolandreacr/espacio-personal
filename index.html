@@ -398,6 +398,39 @@ header{
 .brand-item.open textarea{
   display:block;
 }
+/* ===== DOCUMENTOS PROYECTO ===== */
+.file-upload{
+  border:2px dashed #ccc;
+  border-radius:12px;
+  padding:16px;
+  text-align:center;
+  cursor:pointer;
+  margin-bottom:10px;
+  font-size:13px;
+}
+
+.file-upload label{
+  cursor:pointer;
+}
+
+.file-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:13px;
+  margin-bottom:6px;
+}
+
+.file-row a{
+  color:#4a4a4a;
+  text-decoration:none;
+}
+
+.file-row button{
+  border:none;
+  background:none;
+  cursor:pointer;
+}
 </style>
 </head>
 <body>
@@ -537,6 +570,20 @@ header{
       <p style="font-size:12px;color:#777">
         Próximamente podrás subir archivos (pdf, doc, jpg, etc.)
       </p>
+    <div class="file-upload">
+  <input
+    type="file"
+    id="fileInput"
+    multiple
+    style="display:none"
+    onchange="handleFileUpload(event)"
+  >
+  <label for="fileInput">
+    📎 Haz clic para subir archivos
+  </label>
+</div>
+
+<div id="fileList"></div>
     </div>
 
 <!-- Kit de marca -->
@@ -628,7 +675,25 @@ header{
 
 <!-- ================== SALUD ================== -->
 <div id="health" class="content">💚 Salud (en desarrollo)</div>
-<script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getStorage } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAJwzhsLDjamvPmPYoWbvnmbZpfKJylv8Y",
+    authDomain: "mi-espacio-terapeutico.firebaseapp.com",
+    projectId: "mi-espacio-terapeutico",
+    storageBucket: "mi-espacio-terapeutico.firebasestorage.app",
+    messagingSenderId: "530552474926",
+    appId: "1:530552474926:web:2e27adb503fcf0c6187ebf"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const storage = getStorage(app);
+
+  window.firebaseStorage = storage;
+</script>
+  <script>
 /* ================== ESTADO GLOBAL ================== */
 let currentDay = new Date();
 let currentWeekOffset = 0;
@@ -1033,6 +1098,7 @@ openProject = function(id){
   originalOpenProject(id);
   setTimeout(loadBrandKit, 0);
 };
+
 </script>
 
 </body>
