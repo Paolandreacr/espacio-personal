@@ -234,20 +234,34 @@ header{
 
 .projects-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
-  gap:12px;
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:14px;
 }
 
 .project-folder{
-  background:#fff;
-  border-radius:12px;
-  padding:12px;
+  border-radius:14px;
+  padding:20px 10px;
   text-align:center;
   cursor:pointer;
+  position:relative;
+  font-weight:600;
+  box-shadow:0 4px 10px rgba(0,0,0,.05);
 }
 
-.project-folder .icon{
-  font-size:32px;
+.project-actions{
+  position:absolute;
+  top:6px;
+  right:6px;
+  display:flex;
+  gap:6px;
+}
+
+.project-actions button{
+  border:none;
+  background:rgba(255,255,255,.7);
+  border-radius:6px;
+  cursor:pointer;
+  font-size:12px;
 }
 
 /* colores carpetas */
@@ -261,7 +275,7 @@ header{
 .folder-ocre{background:var(--ocre);}
 .folder-beige{background:var(--beige);}
 
-/* subvista proyecto */
+/* ================== SUBVISTA PROYECTO ================== */
 .project-view{display:none;}
 .project-view.active{display:block;}
 
@@ -269,9 +283,9 @@ header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:10px;
-  border-radius:12px;
-  margin-bottom:12px;
+  padding:12px;
+  border-radius:14px;
+  margin-bottom:14px;
 }
 
 .close-project{
@@ -281,11 +295,47 @@ header{
   cursor:pointer;
 }
 
+/* ================== PENDIENTES ================== */
+.task-input{
+  width:100%;
+  border:none;
+  border-bottom:1px solid #ccc;
+  padding:6px;
+  font-size:14px;
+  margin-bottom:10px;
+}
+
+.task-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+
+.task-row input[type="text"]{
+  border:none;
+  background:transparent;
+  flex:1;
+}
+
+.task-row.done input[type="text"]{
+  text-decoration:line-through;
+  opacity:.6;
+}
+
+.task-row button{
+  border:none;
+  background:none;
+  cursor:pointer;
+  font-size:12px;
+}
+
+/* ================== SECCIONES ================== */
 .project-section{
   background:#fff;
-  border-radius:12px;
-  padding:12px;
-  margin-bottom:12px;
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:14px;
 }
 
 /* ================== MODALES ================== */
@@ -294,7 +344,7 @@ header{
 #projectModal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.3);
+  background:rgba(0,0,0,.35);
   display:none;
   justify-content:center;
   align-items:center;
@@ -304,11 +354,11 @@ header{
 .modal-box{
   background:#fff;
   padding:16px;
-  border-radius:12px;
+  border-radius:14px;
   width:260px;
 }
 
-/* ================== BURBUJA ================== */
+/* ================== BURBUJA SEMESTRE ================== */
 #semesterInfo{
   position:fixed;
   background:#fff;
@@ -320,7 +370,6 @@ header{
 }
 </style>
 </head>
-
 <body>
 
 <header>🌱 Mi espacio</header>
@@ -418,14 +467,13 @@ header{
     <button onclick="closeSemesterModal()">Cancelar</button>
   </div>
 </div>
-
 <!-- ================== PROYECTOS ================== -->
 <div id="projects" class="content">
 
   <!-- Vista principal -->
   <div id="projectsMain">
     <div class="projects-header">
-      <h3>📁 Proyectos</h3>
+      <h3>Proyectos</h3>
       <button class="add-project-btn" onclick="openProjectModal()">＋</button>
     </div>
 
@@ -434,17 +482,26 @@ header{
 
   <!-- Subvista proyecto -->
   <div id="projectView" class="project-view">
+
     <div class="project-view-header" id="projectViewHeader">
       <strong id="projectTitle"></strong>
       <button class="close-project" onclick="closeProjectView()">✖</button>
     </div>
 
+    <!-- Pendientes -->
     <div class="project-section">
       <h4>✅ Pendientes</h4>
+
+      <input
+        type="text"
+        class="task-input"
+        id="taskInput"
+        placeholder="Escribe y presiona Enter">
+
       <div id="projectTasks"></div>
-      <button onclick="addProjectTask()">＋</button>
     </div>
 
+    <!-- Documentos -->
     <div class="project-section">
       <h4>📂 Documentos importantes</h4>
       <p style="font-size:12px;color:#777">
@@ -452,6 +509,7 @@ header{
       </p>
     </div>
 
+    <!-- Kit de marca -->
     <div class="project-section">
       <h4>🎨 Kit de marca</h4>
       <ul style="font-size:12px;color:#777">
@@ -462,14 +520,14 @@ header{
         <li>Banco de temas</li>
       </ul>
     </div>
-  </div>
 
+  </div>
 </div>
 
-<!-- ================== MODAL NUEVO PROYECTO ================== -->
+<!-- ================== MODAL NUEVO / EDITAR PROYECTO ================== -->
 <div id="projectModal">
   <div class="modal-box">
-    <h4>Nuevo proyecto</h4>
+    <h4 id="projectModalTitle">Nuevo proyecto</h4>
 
     <input id="projectName" type="text" placeholder="Nombre del proyecto">
 
@@ -486,8 +544,10 @@ header{
       <option value="beige">Beige</option>
     </select>
 
-    <button onclick="saveProject()">Crear</button>
-    <button onclick="closeProjectModal()">Cancelar</button>
+    <div style="margin-top:12px;text-align:right">
+      <button onclick="saveProject()">Guardar</button>
+      <button onclick="closeProjectModal()">Cancelar</button>
+    </div>
   </div>
 </div>
 
@@ -503,9 +563,10 @@ let semesterStart = new Date(currentMonth.getFullYear(), 0, 1);
 let events = JSON.parse(localStorage.getItem("events") || "[]");
 let projects = JSON.parse(localStorage.getItem("projects") || "[]");
 
-let selectedSemesterEvent = null;
 let selectedMonthDate = null;
+let selectedSemesterEvent = null;
 let activeProject = null;
+let editingProjectId = null;
 
 /* ================== UTILIDADES ================== */
 function saveEvents(){
@@ -529,21 +590,15 @@ function openTab(id){
 
 /* ================== DÍA ================== */
 function renderDay(){
-  document.getElementById("currentDate").textContent =
+  currentDate.textContent =
     currentDay.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});
 
-  const container = document.getElementById("hours");
-  container.innerHTML="";
-
+  hours.innerHTML="";
   for(let h=6;h<=22;h++){
     const block=document.createElement("div");
     block.className="hour-block";
     block.innerHTML=`
       <strong>${h}:00</strong>
-      <label style="float:right">
-        <input type="checkbox">
-        Mostrar en semana
-      </label>
       <div class="half-hour">
         <input type="checkbox">
         <input type="text" placeholder=":00">
@@ -553,7 +608,7 @@ function renderDay(){
         <input type="text" placeholder=":30">
       </div>
     `;
-    container.appendChild(block);
+    hours.appendChild(block);
   }
 }
 
@@ -564,31 +619,28 @@ function changeDay(delta){
 
 /* ================== SEMANA ================== */
 function renderWeek(){
-  const grid=document.getElementById("weekGrid");
-  grid.innerHTML="";
+  weekGrid.innerHTML="";
   const base=new Date();
   base.setDate(base.getDate()-base.getDay()+1+(currentWeekOffset*7));
 
   for(let i=0;i<7;i++){
     const d=new Date(base);
     d.setDate(base.getDate()+i);
+
     const dayDiv=document.createElement("div");
     dayDiv.className="week-day";
     dayDiv.innerHTML=`<h4>${d.toLocaleDateString("es-ES",{weekday:"short",day:"numeric"})}</h4>`;
 
-    events
-      .filter(e=>e.date===formatDate(d) && e.showWeek)
+    events.filter(e=>e.date===formatDate(d) && e.showWeek)
       .forEach((e,idx)=>{
         const ev=document.createElement("div");
         ev.className="week-event";
-        ev.innerHTML=`
-          ${e.text||""} ${e.hour||""}
-          <button onclick="deleteEvent(${idx})">🗑</button>
-        `;
+        ev.innerHTML=`${e.text||""} ${e.hour||""}
+          <button onclick="deleteEvent(${idx})">🗑</button>`;
         dayDiv.appendChild(ev);
       });
 
-    grid.appendChild(dayDiv);
+    weekGrid.appendChild(dayDiv);
   }
 }
 
@@ -599,15 +651,14 @@ function changeWeek(delta){
 
 /* ================== MES ================== */
 function renderMonth(){
-  const grid=document.getElementById("monthGrid");
-  grid.innerHTML="";
+  monthGrid.innerHTML="";
   const y=currentMonth.getFullYear();
   const m=currentMonth.getMonth();
   const first=new Date(y,m,1);
   const start=(first.getDay()+6)%7;
   const days=new Date(y,m+1,0).getDate();
 
-  for(let i=0;i<start;i++) grid.appendChild(document.createElement("div"));
+  for(let i=0;i<start;i++) monthGrid.appendChild(document.createElement("div"));
 
   for(let d=1;d<=days;d++){
     const date=new Date(y,m,d);
@@ -619,14 +670,12 @@ function renderMonth(){
     events.filter(e=>e.date===formatDate(date)).forEach((e,idx)=>{
       const ev=document.createElement("div");
       ev.className="month-event "+(e.class||"");
-      ev.innerHTML=`
-        ${e.text||""}${e.hour?" ⏰"+e.hour:""}
-        <span onclick="deleteEvent(${idx})">🗑</span>
-      `;
+      ev.innerHTML=`${e.text||""}${e.hour?" ⏰"+e.hour:""}
+        <span onclick="deleteEvent(${idx})">🗑</span>`;
       cell.appendChild(ev);
     });
 
-    grid.appendChild(cell);
+    monthGrid.appendChild(cell);
   }
 }
 
@@ -637,23 +686,22 @@ function openMonthModal(date){
   monthDetail.value="";
   monthHour.value="";
   monthHour.style.display="none";
-  document.getElementById("monthModal").style.display="flex";
+  monthModal.style.display="flex";
 }
 
 function closeMonthModal(){
-  document.getElementById("monthModal").style.display="none";
+  monthModal.style.display="none";
 }
 
 function handleMonthCategory(){
-  const cat=monthCategory.value;
-  monthHour.style.display=(cat==="vet"||cat==="medico")?"block":"none";
+  monthHour.style.display =
+    (monthCategory.value==="vet"||monthCategory.value==="medico")?"block":"none";
 }
 
 function saveMonthEvent(){
   const cat=monthCategory.value;
   const detail=monthDetail.value;
   const hour=monthHour.value;
-
   if(!cat||!detail) return alert("Completa los campos");
 
   let text="", cls="";
@@ -661,13 +709,7 @@ function saveMonthEvent(){
   if(cat==="vet"){text="🐶 Vet: "+detail;cls="month-vet";}
   if(cat==="medico"){text="🩺 Médico: "+detail;cls="month-medico";}
 
-  events.push({
-    date:formatDate(selectedMonthDate),
-    text,
-    hour,
-    class:cls
-  });
-
+  events.push({date:formatDate(selectedMonthDate),text,hour,class:cls});
   saveEvents();
   closeMonthModal();
   renderMonth();
@@ -676,9 +718,7 @@ function saveMonthEvent(){
 
 /* ================== SEMESTRE ================== */
 function renderSemester(){
-  const cont=document.getElementById("semesterView");
-  cont.innerHTML="";
-
+  semesterView.innerHTML="";
   for(let m=0;m<6;m++){
     const month=new Date(semesterStart.getFullYear(),semesterStart.getMonth()+m,1);
     const box=document.createElement("div");
@@ -687,8 +727,8 @@ function renderSemester(){
 
     const grid=document.createElement("div");
     grid.className="semester-grid";
-
     const days=new Date(month.getFullYear(),month.getMonth()+1,0).getDate();
+
     for(let d=1;d<=days;d++){
       const cell=document.createElement("div");
       cell.className="semester-day";
@@ -700,24 +740,54 @@ function renderSemester(){
       ).forEach(e=>{
         const bar=document.createElement("div");
         bar.className="roadbar "+e.class;
-        bar.onclick=(evt)=>showSemesterInfo(e,evt);
         cell.appendChild(bar);
       });
 
-      cell.onclick=()=>openSemesterModal();
+      cell.onclick=()=>semesterModal.style.display="flex";
       grid.appendChild(cell);
     }
 
     box.appendChild(grid);
-    cont.appendChild(box);
+    semesterView.appendChild(box);
   }
 }
 
+function closeSemesterModal(){
+  semesterModal.style.display="none";
+}
+
+function saveSemesterEvent(){
+  const cats=[...semesterModal.querySelectorAll("input:checked")].map(c=>c.value);
+  if(!cats.length) return;
+
+  cats.forEach(cat=>{
+    events.push({
+      start:semStart.value,
+      end:semEnd.value,
+      detail:semDetail.value,
+      class:"cat-"+cat
+    });
+  });
+
+  saveEvents();
+  closeSemesterModal();
+  renderSemester();
+}
+
 /* ================== PROYECTOS ================== */
-function openProjectModal(){
-  projectName.value="";
-  projectColor.value="rosado";
+function openProjectModal(project=null){
   projectModal.style.display="flex";
+  if(project){
+    projectModalTitle.textContent="Editar proyecto";
+    projectName.value=project.name;
+    projectColor.value=project.color;
+    editingProjectId=project.id;
+  }else{
+    projectModalTitle.textContent="Nuevo proyecto";
+    projectName.value="";
+    projectColor.value="rosado";
+    editingProjectId=null;
+  }
 }
 
 function closeProjectModal(){
@@ -729,33 +799,48 @@ function saveProject(){
   const color=projectColor.value;
   if(!name) return alert("Ponle nombre");
 
-  projects.push({
-    id:Date.now(),
-    name,
-    color,
-    tasks:[],
-    documents:[],
-    brandKit:{}
-  });
+  if(editingProjectId){
+    const p=projects.find(p=>p.id===editingProjectId);
+    p.name=name;
+    p.color=color;
+    editingProjectId=null;
+  }else{
+    projects.push({
+      id:Date.now(),
+      name,
+      color,
+      tasks:[],
+      documents:[],
+      brandKit:{}
+    });
+  }
 
   saveProjects();
   closeProjectModal();
   renderProjects();
 }
 
-function renderProjects(){
-  const grid=document.getElementById("projectsGrid");
-  grid.innerHTML="";
+function deleteProject(id){
+  if(!confirm("¿Eliminar proyecto?")) return;
+  projects=projects.filter(p=>p.id!==id);
+  saveProjects();
+  renderProjects();
+}
 
+function renderProjects(){
+  projectsGrid.innerHTML="";
   projects.forEach(p=>{
     const div=document.createElement("div");
     div.className=`project-folder folder-${p.color}`;
     div.innerHTML=`
-      <div class="icon">📁</div>
+      <div class="project-actions">
+        <button onclick="event.stopPropagation();openProjectModal(${JSON.stringify(p).replace(/"/g,'&quot;')})">✏️</button>
+        <button onclick="event.stopPropagation();deleteProject(${p.id})">🗑</button>
+      </div>
       <div>${p.name}</div>
     `;
     div.onclick=()=>openProject(p.id);
-    grid.appendChild(div);
+    projectsGrid.appendChild(div);
   });
 }
 
@@ -774,56 +859,48 @@ function closeProjectView(){
   activeProject=null;
 }
 
+/* ================== PENDIENTES ================== */
 function renderProjectTasks(){
   projectTasks.innerHTML="";
   activeProject.tasks.forEach((t,idx)=>{
     const row=document.createElement("div");
+    row.className="task-row"+(t.done?" done":"");
     row.innerHTML=`
       <input type="checkbox" ${t.done?"checked":""}
         onchange="toggleTask(${idx})">
-      ${t.text}
+      <input type="text" value="${t.text}"
+        onchange="editTask(${idx},this.value)">
+      <button onclick="deleteTask(${idx})">🗑</button>
     `;
     projectTasks.appendChild(row);
   });
 }
 
-function addProjectTask(){
-  const text=prompt("Pendiente");
-  if(!text) return;
-  activeProject.tasks.push({text,done:false});
-  saveProjects();
-  renderProjectTasks();
-}
+document.addEventListener("keydown",e=>{
+  if(!activeProject || e.target.id!=="taskInput") return;
+  if(e.key==="Enter" && e.target.value.trim()){
+    activeProject.tasks.push({text:e.target.value.trim(),done:false});
+    e.target.value="";
+    saveProjects();
+    renderProjectTasks();
+  }
+});
 
 function toggleTask(idx){
   activeProject.tasks[idx].done=!activeProject.tasks[idx].done;
   saveProjects();
+  renderProjectTasks();
 }
 
-/* ================== SEMESTRE MODAL ================== */
-function openSemesterModal(){
-  semesterModal.style.display="flex";
+function editTask(idx,value){
+  activeProject.tasks[idx].text=value;
+  saveProjects();
 }
 
-function closeSemesterModal(){
-  semesterModal.style.display="none";
-}
-
-function saveSemesterEvent(){
-  const cats=[...semesterModal.querySelectorAll("input:checked")].map(c=>c.value);
-  if(!cats.length) return;
-
-  const start=semStart.value;
-  const end=semEnd.value;
-  const detail=semDetail.value;
-
-  cats.forEach(cat=>{
-    events.push({start,end,detail,class:"cat-"+cat});
-  });
-
-  saveEvents();
-  closeSemesterModal();
-  renderSemester();
+function deleteTask(idx){
+  activeProject.tasks.splice(idx,1);
+  saveProjects();
+  renderProjectTasks();
 }
 
 /* ================== BORRAR ================== */
@@ -844,6 +921,6 @@ renderMonth();
 renderSemester();
 renderProjects();
 </script>
-</body>
-</html> 
 
+</body>
+</html>
