@@ -576,6 +576,7 @@ header{
  <input
   type="file"
   id="fileInput"
+  style="display:none"
   onchange="uploadProjectFile(this.files[0])"
 >
   <label for="fileInput">
@@ -1008,12 +1009,17 @@ function renderProjects(){
 
 function openProject(id){
   activeProject=projects.find(p=>p.id===id);
+  localStorage.setItem("activeProjectId", id); 
   projectsMain.style.display="none";
   projectView.classList.add("active");
   projectTitle.textContent=activeProject.name;
   projectViewHeader.className=`project-view-header folder-${activeProject.color}`;
   renderProjectTasks();
   renderProjectDocuments(); 
+  const lastProjectId = localStorage.getItem("activeProjectId");
+if (lastProjectId) {
+  openTab("projects");
+  openProject(Number(lastProjectId));
 }
 
 function closeProjectView(){
