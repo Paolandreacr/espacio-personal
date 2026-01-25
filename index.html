@@ -570,6 +570,12 @@ header{
       <p style="font-size:12px;color:#777">
         Próximamente podrás subir archivos (pdf, doc, jpg, etc.)
       </p>
+  <input
+  type="file"
+  onchange="uploadProjectFile(this.files[0])"
+/>
+
+<div id="projectDocuments"></div>
     <div class="file-upload">
   <input
     type="file"
@@ -692,6 +698,44 @@ header{
   const storage = getStorage(app);
 
   window.firebaseStorage = storage;
+<script type="module">
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
+
+/* SUBIR ARCHIVO A FIREBASE */
+window.uploadProjectFile = async function (file) {
+  if (!activeProject || !file) return;
+
+  try {
+    const storage = window.firebaseStorage;
+
+    const fileRef = ref(
+      storage,
+      `projects/${activeProject.id}/${file.name}`
+    );
+
+    await uploadBytes(fileRef, file);
+    const url = await getDownloadURL(fileRef);
+
+    if (!activeProject.documents) activeProject.documents = [];
+
+    activeProject.documents.push({
+      name: file.name,
+      url: url
+    });
+
+    saveProjects();
+    renderProjectDocuments();
+
+    alert("Archivo subido correctamente ✅");
+  } catch (err) {
+    console.error(err);
+    alert("Error al subir archivo ❌");
+  }
+};
 </script>
   <script>
 /* ================== ESTADO GLOBAL ================== */
@@ -991,6 +1035,7 @@ function openProject(id){
   projectTitle.textContent=activeProject.name;
   projectViewHeader.className=`project-view-header folder-${activeProject.color}`;
   renderProjectTasks();
+  renderProjectDocuments(); 
 }
 
 function closeProjectView(){
@@ -1098,7 +1143,21 @@ openProject = function(id){
   originalOpenProject(id);
   setTimeout(loadBrandKit, 0);
 };
+function renderProjectDocuments(){
+  const container = document.getElementById("projectDocuments");
+  if (!container || !activeProject) return;
 
+  container.innerHTML = "";
+
+  (activeProject.documents || []).forEach(doc=>{
+    const div = document.createElement("div");
+    div.style.fontSize = "13px";
+    div.innerHTML = `
+      📄 <a href="${doc.url}" target="_blank">${doc.name}</a>
+    `;
+    container.appendChild(div);
+  });
+}
 </script>
 
 </body>
