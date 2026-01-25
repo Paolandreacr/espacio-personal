@@ -698,19 +698,30 @@ header{
   const storage = getStorage(app);
 
   window.firebaseStorage = storage;
+  
 <script type="module">
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL
+  } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 
-/* SUBIR ARCHIVO A FIREBASE */
-window.uploadProjectFile = async function (file) {
-  if (!activeProject || !file) return;
+  const firebaseConfig = {
+    apiKey: "AIzaSyAJwzhsLDjamvPmPYoWbvnmbZpfKJylv8Y",
+    authDomain: "mi-espacio-terapeutico.firebaseapp.com",
+    projectId: "mi-espacio-terapeutico",
+    storageBucket: "mi-espacio-terapeutico.firebasestorage.app",
+    messagingSenderId: "530552474926",
+    appId: "1:530552474926:web:2e27adb503fcf0c6187ebf"
+  };
 
-  try {
-    const storage = window.firebaseStorage;
+  const app = initializeApp(firebaseConfig);
+  const storage = getStorage(app);
+
+  window.uploadProjectFile = async function(file){
+    if(!window.activeProject || !file) return;
 
     const fileRef = ref(
       storage,
@@ -720,23 +731,14 @@ window.uploadProjectFile = async function (file) {
     await uploadBytes(fileRef, file);
     const url = await getDownloadURL(fileRef);
 
-    if (!activeProject.documents) activeProject.documents = [];
+    if(!activeProject.documents) activeProject.documents = [];
+    activeProject.documents.push({ name:file.name, url });
 
-    activeProject.documents.push({
-      name: file.name,
-      url: url
-    });
-
-    saveProjects();
+    localStorage.setItem("projects", JSON.stringify(projects));
     renderProjectDocuments();
-
-    alert("Archivo subido correctamente ✅");
-  } catch (err) {
-    console.error(err);
-    alert("Error al subir archivo ❌");
-  }
-};
+  };
 </script>
+  
   <script>
 /* ================== ESTADO GLOBAL ================== */
 let currentDay = new Date();
