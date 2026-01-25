@@ -571,17 +571,14 @@ header{
         Próximamente podrás subir archivos (pdf, doc, jpg, etc.)
       </p>
 
-<div id="projectDocuments"></div>
-    <div class="file-upload">
- <input
-  type="file"
-  id="fileInput"
-  style="display:none"
-  onchange="uploadProjectFile(this.files[0])"
->
-  <label for="fileInput">
-    📎 Haz clic para subir archivos
-  </label>
+<div class="file-upload" onclick="document.getElementById('fileInput').click()">
+  📎 Haz clic para subir archivos
+  <input
+    type="file"
+    id="fileInput"
+    style="display:none"
+    onchange="uploadProjectFile(this.files[0])"
+  >
 </div>
 
     </div>
@@ -1016,10 +1013,6 @@ function openProject(id){
   projectViewHeader.className=`project-view-header folder-${activeProject.color}`;
   renderProjectTasks();
   renderProjectDocuments(); 
-  const lastProjectId = localStorage.getItem("activeProjectId");
-if (lastProjectId) {
-  openTab("projects");
-  openProject(Number(lastProjectId));
 }
 
 function closeProjectView(){
@@ -1089,6 +1082,13 @@ renderWeek();
 renderMonth();
 renderSemester();
 renderProjects();
+
+ const lastProjectId = localStorage.getItem("activeProjectId");
+if (lastProjectId) {
+  openTab("projects");
+  openProject(Number(lastProjectId));
+}
+    
 /* ================== KIT DE MARCA ================== */
 
 function toggleBrand(header){
