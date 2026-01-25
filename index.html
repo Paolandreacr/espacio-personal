@@ -577,13 +577,12 @@ header{
 
 <div id="projectDocuments"></div>
     <div class="file-upload">
-  <input
-    type="file"
-    id="fileInput"
-    multiple
-    style="display:none"
-    onchange="handleFileUpload(event)"
-  >
+ <input
+  type="file"
+  id="fileInput"
+  multiple
+  onchange="uploadProjectFile(this.files[0])"
+>
   <label for="fileInput">
     📎 Haz clic para subir archivos
   </label>
@@ -681,23 +680,6 @@ header{
 
 <!-- ================== SALUD ================== -->
 <div id="health" class="content">💚 Salud (en desarrollo)</div>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getStorage } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAJwzhsLDjamvPmPYoWbvnmbZpfKJylv8Y",
-    authDomain: "mi-espacio-terapeutico.firebaseapp.com",
-    projectId: "mi-espacio-terapeutico",
-    storageBucket: "mi-espacio-terapeutico.firebasestorage.app",
-    messagingSenderId: "530552474926",
-    appId: "1:530552474926:web:2e27adb503fcf0c6187ebf"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const storage = getStorage(app);
-
-  window.firebaseStorage = storage;
   
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
