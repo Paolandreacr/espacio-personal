@@ -571,14 +571,16 @@ header{
         Próximamente podrás subir archivos (pdf, doc, jpg, etc.)
       </p>
 
-<div class="file-upload" onclick="document.getElementById('fileInput').click()">
-  📎 Haz clic para subir archivos
+<div class="file-upload">
   <input
     type="file"
     id="fileInput"
     style="display:none"
     onchange="uploadProjectFile(this.files[0])"
   >
+  <label for="fileInput">
+    📎 Haz clic para subir archivos
+  </label>
 </div>
 
     </div>
@@ -686,7 +688,7 @@ header{
     apiKey: "AIzaSyAJwzhsLDjamvPmPYoWbvnmbZpfKJylv8Y",
     authDomain: "mi-espacio-terapeutico.firebaseapp.com",
     projectId: "mi-espacio-terapeutico",
-    storageBucket: "mi-espacio-terapeutico.firebasestorage.app",
+    storageBucket: "mi-espacio-terapeutico.appspot.com",
     messagingSenderId: "530552474926",
     appId: "1:530552474926:web:2e27adb503fcf0c6187ebf"
   };
