@@ -696,23 +696,11 @@ header{
   const app = initializeApp(firebaseConfig);
   const storage = getStorage(app);
 
-  window.uploadProjectFile = async function(file){
-    if(!window.activeProject || !file) return;
-
-    const fileRef = ref(
-      storage,
-      `projects/${activeProject.id}/${file.name}`
-    );
-
-    await uploadBytes(fileRef, file);
-    const url = await getDownloadURL(fileRef);
-
-    if(!activeProject.documents) activeProject.documents = [];
-    activeProject.documents.push({ name:file.name, url });
-
-    localStorage.setItem("projects", JSON.stringify(projects));
-    renderProjectDocuments();
-  };
+  // 🔹 Exponer Firebase al resto de la página
+  window.firebaseStorage = storage;
+  window.firebaseRef = ref;
+  window.firebaseUploadBytes = uploadBytes;
+  window.firebaseGetDownloadURL = getDownloadURL;
 </script>
   
   <script>
@@ -1143,6 +1131,38 @@ function renderProjectDocuments(){
     `;
     container.appendChild(div);
   });
+}
+async function uploadProjectFile(file){
+  if(!activeProject || !file){
+    alert("No hay proyecto activo");
+    return;
+  }
+
+  try{
+    const storage = window.firebaseStorage;
+
+    const fileRef = window.firebaseRef(
+      storage,
+      `projects/${activeProject.id}/${file.name}`
+    );
+
+    await window.firebaseUploadBytes(fileRef, file);
+    const url = await window.firebaseGetDownloadURL(fileRef);
+
+    if(!activeProject.documents) activeProject.documents = [];
+    activeProject.documents.push({
+      name: file.name,
+      url: url
+    });
+
+    saveProjects();
+    renderProjectDocuments();
+
+    alert("Archivo subido correctamente ✅");
+  }catch(err){
+    console.error(err);
+    alert("Error al subir archivo ❌");
+  }
 }
 </script>
 
